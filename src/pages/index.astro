@@ -1,5 +1,5 @@
 ---
-import SearchBar from '../components/react/SearchBar';
+import SearchScenarioInput from '../components/react/SearchScenarioInput';
 import Layout from '../layouts/BaseLayout.astro';
 import ScenarioList from "../components/react/ScenarioList";
 import SideBar from '../components/sideBarComponents/SideBar.astro';
@@ -13,7 +13,7 @@ import ScoreList from '../components/react/ScoreList';
 <Layout>
 	<div class="innerGrid">
 		<div class="searchScenarioBundle">
-			<SearchBar client:load/>
+			<SearchScenarioInput client:load/>
 			<ScenarioList client:load/>
 		</div>
 		<ScoreList client:load/>

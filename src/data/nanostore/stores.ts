@@ -11,6 +11,14 @@ export function changeScenarioSearchValue(value: any[]) {
 //-----End of scenarioSearchValue----------
 
 
+//-----scenarioSearchBarValue--------------
+export const scenarioSearchBarValue = atom<string>("");
+
+export function changeScenarioSearchBarValue(value: string) {
+  scenarioSearchBarValue.set(value);
+}
+//-----End of scenarioSearchBarValue-------
+
 //-----selectedScenario--------------------
 export const selectedScenarioId = atom<number>(605);
 export const selectedScenarioName = atom<string>("Pasu Voltaic Easy");
