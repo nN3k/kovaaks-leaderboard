@@ -1,11 +1,22 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import SearchBar from '../components/react/SearchBar';
+import Layout from '../layouts/BaseLayout.astro';
+import ScenarioList from "../components/react/ScenarioList";
+import SideBar from '../components/sideBarComponents/SideBar.astro';
+import ScoreList from '../components/react/ScoreList';
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
 ---
 
 <Layout>
-	<Welcome />
+	<div class="innerGrid">
+		<div class="searchScenarioBundle">
+			<SearchBar client:load/>
+			<ScenarioList client:load/>
+		</div>
+		<ScoreList client:load/>
+	</div>
+	<SideBar/>
 </Layout>

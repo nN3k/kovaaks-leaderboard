@@ -1,0 +1,10 @@
+.row {
+    display: flex;
+    padding-left: 15px;
+}
+
+.sideBarDiv {
+    background-color: var(--secondary-color);
+    right: 0;
+    position:absolute;
+}

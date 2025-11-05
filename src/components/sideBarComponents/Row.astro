@@ -1,0 +1,10 @@
+---
+import astroLogo from '../../assets/astro.svg';
+
+const { rowDisplay } = Astro.props; 
+---
+
+<div class="row">
+    <img src={astroLogo.src}>
+    <p>{rowDisplay}</p>
+</div>

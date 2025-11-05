@@ -1,0 +1,22 @@
+---
+import config from "../data/config.json";
+import "../styles/global.css"
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{config.project_Name}</title>
+	</head>
+	<body>
+		<div class="mainGrid">
+			<slot />
+		</div>
+		<script type="module" src="/src/scripts/json_inject_css.ts"></script>
+		<script type="module" src="/src/scripts/KvKProfile.ts"></script>
+	</body>
+</html>
