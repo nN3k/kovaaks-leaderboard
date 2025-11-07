@@ -81,3 +81,9 @@ li:hover {
 	flex-direction: column;
     padding-right: 15px;
 }
+
+.leaderboardInfo {
+	display:grid;
+    grid-template-columns: 2fr 1fr;
+	align-self: center;
+}

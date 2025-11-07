@@ -54,6 +54,7 @@ const SearchBarComponent = () => {
                 }
 
                 changeScenarioSearchValue(scenarios);
+                
             } catch (err: any) {
                 if (err.name !== "AbortError") {
                     console.error("Fetch error:", err);
@@ -72,6 +73,7 @@ const SearchBarComponent = () => {
         setInput(value);
     };
 
+    // Physical Component
     return (
         <div className="searchBarContainer">
             <div className="searchInputWrapper">
