@@ -1,4 +1,6 @@
 // @ts-check
+import awsAmplify from 'astro-aws-amplify';
+
 import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
@@ -13,5 +15,8 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()]
-  }
+  },
+
+  output: "server",
+  adapter: awsAmplify(),
 });
