@@ -1,6 +1,4 @@
 // @ts-check
-import awsAmplify from 'astro-aws-amplify';
-
 import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
@@ -8,6 +6,8 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 
 import db from '@astrojs/db';
+
+import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,6 +17,5 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  output: "server",
-  adapter: awsAmplify(),
+  adapter: netlify()
 });
