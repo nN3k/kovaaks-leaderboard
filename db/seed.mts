@@ -2,5 +2,5 @@ import { db, Profile } from 'astro:db';
 
 // https://astro.build/db/seed
 export default async function seed() {
-	  console.log("Database seeding from .ts file");
+	  console.log("Database seeding from .mts file");
 }
