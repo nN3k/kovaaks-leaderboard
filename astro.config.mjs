@@ -11,10 +11,14 @@ import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
+
   integrations: [react(), db()],
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    server: {
+      allowedHosts: ['localhost', 'unpunctuating-rihanna-nondynastically.ngrok-free.dev'],
+    },
   },
 
   adapter: netlify()

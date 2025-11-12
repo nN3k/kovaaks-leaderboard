@@ -6,14 +6,15 @@ import SideBar from '../components/sideBarComponents/SideBar.astro';
 import ScoreList from '../components/react/ScoreList';
 import ScoreListName from '../components/react/ScoreListName';
 import ToggleLeaderboard from '../components/react/ToggleLeaderboard';
+import LogoutButton from '../components/react/LogOutSteam';
+import LoginWithSteam from '../components/react/LoginWithSteam';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 
 ---
 
 <Layout>
 	<div class="innerGrid">
+		<LoginWithSteam client:load/>
 		<div class="searchScenarioBundle">
 			<SearchScenarioInput client:load/>
 			<ScenarioList client:load/>

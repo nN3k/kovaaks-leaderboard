@@ -1,0 +1,15 @@
+---
+---
+
+<button id="run-server">Run Server Code</button>
+
+<script>
+    const element = document.getElementById('run-server')
+    if (element != null) {
+        element.addEventListener('click', async (event) => {
+            event.preventDefault(); // 🔥 prevents page reload / navigation
+            const res = await fetch('/api/run-server-code', { method: 'POST' });
+            const data = await res.json();
+        });
+    }
+</script>

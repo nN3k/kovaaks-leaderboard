@@ -2,5 +2,8 @@
   command = "npm run build -- --remote"
   publish = "dist"
 
+[functions]
+  directory = "netlify/functions"
+
 [build.environment]
   NODE_VERSION = "18"

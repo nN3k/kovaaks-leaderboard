@@ -1,5 +1,8 @@
 ---
 import ProfileManager from '../components/react/ProfileManager';
+import TestButton from '../components/react/testbutton';
+import AstroButton from '../components/AstroButton.astro';
+import LoginWithSteam from '../components/react/LoginWithSteam';
 ---
 
 <html lang="en">
@@ -9,6 +12,8 @@ import ProfileManager from '../components/react/ProfileManager';
   <title>Profile Test</title>
 </head>
 <body>
+    <LoginWithSteam client:load />
+    <AstroButton />
     <ProfileManager client:load />
 </body>
 </html>
