@@ -1,22 +1,23 @@
-import { db, Profile } from "astro:db";
+import { useEffect, useState } from 'react';
 
-const testButtonComponent = () => {
 
-    const handleInsert = async (): Promise<void> => {
-        console.log("clicked")
-        await db.insert(Profile).values({
-            steamId: 0,
-            steamName: 'Seeded User',
-            country: 'GER',
-            isBanned: false,
-        })
-    }
+//checking if user is logged in
+const ShowSteam = () => {
+  const [user, setUser] = useState<{ steamId: string } | null>(null);
 
-    return (
-        <div>
-            <button onClick={handleInsert}>Test Button</button>
-        </div>
-    );
+  useEffect(() => {
+    const checkLogin = async () => {
+      const res = await fetch('/.netlify/functions/check-login');
+      const data = await res.json();
+      if (data.loggedIn) setUser({ steamId: data.steamId });
+    };
+    checkLogin();
+  }, []);
+
+  return (
+    <div>
+      {user ? <p>Logged in as {user.steamId}</p> : <p>Not logged in</p>}
+    </div>
+  );
 }
-
-export default testButtonComponent;
+export default ShowSteam;

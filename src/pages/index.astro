@@ -6,8 +6,9 @@ import SideBar from '../components/sideBarComponents/SideBar.astro';
 import ScoreList from '../components/react/ScoreList';
 import ScoreListName from '../components/react/ScoreListName';
 import ToggleLeaderboard from '../components/react/ToggleLeaderboard';
-import LogoutButton from '../components/react/LogOutSteam';
+import LogoutButton from '../components/react/LogoutButton';
 import LoginWithSteam from '../components/react/LoginWithSteam';
+import ShowSteam from '../components/react/testbutton';
 
 
 ---
@@ -15,6 +16,8 @@ import LoginWithSteam from '../components/react/LoginWithSteam';
 <Layout>
 	<div class="innerGrid">
 		<LoginWithSteam client:load/>
+		<LogoutButton client:load/>
+		<ShowSteam client:load/>
 		<div class="searchScenarioBundle">
 			<SearchScenarioInput client:load/>
 			<ScenarioList client:load/>
