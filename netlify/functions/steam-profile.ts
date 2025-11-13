@@ -40,6 +40,14 @@ export const handler: Handler = async (event) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data.response.players[0] ?? {}),
     };
+
+    // Shows the full API response
+    //return {
+      //statusCode: 200,
+      //headers: { 'Content-Type': 'application/json' },
+      //body: JSON.stringify(data, null, 2), // pretty-print JSON
+    //};
+
   } catch (err) {
     return {
       statusCode: 500,
