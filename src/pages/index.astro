@@ -8,7 +8,8 @@ import ScoreListName from '../components/react/ScoreListName';
 import ToggleLeaderboard from '../components/react/ToggleLeaderboard';
 import LogoutButton from '../components/react/LogoutButton';
 import LoginWithSteam from '../components/react/LoginWithSteam';
-import ShowSteam from '../components/react/testbutton';
+import ShowSteam from '../components/react/CheckLogin';
+import SteamProfile from '../components/react/SteamProfile';
 
 
 ---
@@ -30,5 +31,6 @@ import ShowSteam from '../components/react/testbutton';
 			<ScoreList client:load/>
 		</div>
 	</div>
+	<SteamProfile client:load/>
 	<SideBar/>
 </Layout>
