@@ -10,15 +10,28 @@ import LogoutButton from '../components/react/LogoutButton';
 import LoginWithSteam from '../components/react/LoginWithSteam';
 import ShowSteam from '../components/react/CheckLogin';
 import SteamProfile from '../components/react/SteamProfile';
+import InputSteamId from '../components/dev/InputSteamId';
+import DevLogin from '../components/dev/Login';
 
 
 ---
 
 <Layout>
 	<div class="innerGrid">
+		{/*
+		PRODUCTION COMPONENTS
+		---------------------
 		<LoginWithSteam client:load/>
 		<LogoutButton client:load/>
 		<ShowSteam client:load/>
+		*/}
+		{/* DEV COMPONENTS
+		---------------------
+		*/}
+		<InputSteamId client:load/>
+		<DevLogin client:load/>
+		<ShowSteam client:load/>
+		<LogoutButton client:load/>
 		<div class="searchScenarioBundle">
 			<SearchScenarioInput client:load/>
 			<ScenarioList client:load/>
