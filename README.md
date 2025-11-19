@@ -1,46 +1,31 @@
-# Astro Starter Kit: Basics
 
-```sh
-npm create astro@latest -- --template basics
-```
+# Raw Aim
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Like in speedrunning a run is only accepted if a VOD of the run linked in the submition.
+Kovaak's does not have this feature. When someone cheats and does not get cought by the Anti-Cheat their run is accepted. Some known and trusted members of this community wished for a mandetory VOD to be submitted in higher ranks. This is the idea behind Raw Aim.
 
-## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+## Demo
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+https://raw-aim.netlify.app/
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
 
-## 🧞 Commands
+## Roadmap
 
-All commands are run from the root of the project, from a terminal:
+- Finish learning everything needed for this project -> How to use Databases and Turso
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- Implement all planed features
+![](https://github.com/nN3k/kovaaks-leaderboard/blob/master/README_ASSETS/features?raw=true)
 
-## 👀 Want to learn more?
+- Finish UI
+![](https://github.com/nN3k/kovaaks-leaderboard/blob/master/README_ASSETS/design?raw=true)
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Clean up every file that was meant for testing and learning
+
+
+## Authors
+
+- [@nN3k](https://www.github.com/nN3k)
+
+I am using this project to learn TypeScript, Astro, React and how to Work with Databases.
+The fact that there are people in this community that wish for something like this is motivationg. The reason for that is, that this project primarily meant to gain more knowledge, will be used by a lot of people if it is good enough.
