@@ -1,6 +1,11 @@
 
 # Raw Aim
 
+
+PLEACE CLONE AND EMAIL ME AFTERWARDS
+THIS IS A PRIVATE REPOSITORY
+ON THE THE 26 OF NOVEMBER THIS REPOSITORY WILL BE MADE PRIVATE AGAIN IF NO CONTACT IS INITIATED
+
 Like in speedrunning a run is only accepted if a VOD of the run linked in the submition.
 Kovaak's does not have this feature. When someone cheats and does not get cought by the Anti-Cheat their run is accepted. Some known and trusted members of this community wished for a mandetory VOD to be submitted in higher ranks. This is the idea behind Raw Aim.
 
@@ -15,10 +20,10 @@ https://raw-aim.netlify.app/
 - Finish learning everything needed for this project -> How to use Databases and Turso
 
 - Implement all planed features
-![](https://github.com/nN3k/kovaaks-leaderboard/blob/master/README_ASSETS/features?raw=true)
+![](https://github.com/user-attachments/assets/74b5557c-21bf-4372-82e6-84ffcbd329f0)
 
 - Finish UI
-![](https://github.com/nN3k/kovaaks-leaderboard/blob/master/README_ASSETS/design?raw=true)
+![](https://github.com/user-attachments/assets/432912e6-dc44-4fab-99bd-aedba2fdc9cd)
 
 - Clean up every file that was meant for testing and learning
 
