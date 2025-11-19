@@ -1,8 +1,6 @@
-import { Handler } from '@netlify/functions';
+import type { Handler } from '@netlify/functions';
 import { serialize } from 'cookie';
-import fetch from 'node-fetch';
 
-const STEAM_API_KEY = process.env.STEAM_API_KEY;
 
 export const handler: Handler = async (event) => {
     try {

@@ -1,4 +1,4 @@
-import { changeSelectedScenarioId, changeSelectedScenarioName, scenarioSearchValue } from "../../data/nanostore/stores";
+import { changeSelectedScenarioId, changeSelectedScenarioName, scenarioSearchValue } from "../../data/nanostores/stores";
 import { useStore } from "@nanostores/react";
 import "../../styles/lists.css"
 

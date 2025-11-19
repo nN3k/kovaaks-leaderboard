@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { changeScenarioSearchValue } from "../../data/nanostore/stores";
+import { changeScenarioSearchValue } from "../../data/nanostores/stores";
 import "../../styles/searchBar.css";
 
 const SearchBarComponent = () => {

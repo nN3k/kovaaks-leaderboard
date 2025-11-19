@@ -1,6 +1,7 @@
 ---
 import config from "../data/config.json";
 import "../styles/global.css";
+import Header from "./Header.astro";
 
 ---
 
@@ -13,6 +14,7 @@ import "../styles/global.css";
 		<meta name="generator" content={Astro.generator} />
 		<title>{config.project_Name}</title>
 	</head>
+	<Header/>
 	<body>
 		<div class="mainGrid">
 			<slot />

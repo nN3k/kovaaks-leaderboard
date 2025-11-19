@@ -1,63 +1,63 @@
 /* Your existing base input style */
 input {
-  margin-bottom: 0.5rem;
-  padding: 0.7rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  color: white;
-  background-color: transparent;
-  border-radius: 4px;
-  font-size: 1rem;
-  width: 100%; /* make it fill container */
-  box-sizing: border-box;
-  outline: none;
-  height: auto; /* don't shrink vertically */
-  min-height: 2.2rem; /* ensures consistent vertical size */
+    margin-bottom: 0.5rem;
+    padding: 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: white;
+    background-color: transparent;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%; /* make it fill container */
+    box-sizing: border-box;
+    outline: none;
+    height: auto; /* don't shrink vertically */
+    min-height: 2.2rem; /* ensures consistent vertical size */
 }
 
 /* Use a wrapper for layout: label + input + spinner */
 .searchBarContainer {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 0.5rem; /* space between label and input */
-  font-family: inherit;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem; /* space between label and input */
+    font-family: inherit;
 }
 
 /* The "Search:" label */
 .searchLabel {
-  color: white;
-  font-weight: 600;
-  white-space: nowrap;
+    color: white;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 /* Input wrapper to position spinner on top of the input */
 .searchInputWrapper {
-  position: relative;
-  flex: 1; /* input takes remaining width */
-  display: flex;
-  align-items: center;
+    position: relative;
+    flex: 1; /* input takes remaining width */
+    display: flex;
+    align-items: center;
 }
 
 
 /* Scenario search bar specifically */
 .scenarioSearchBar {
-  width: 100%; /* override your old "auto" to fill space */
+    width: 100%; /* override your old "auto" to fill space */
 }
 
 /* Spinner on the right of input */
 .searchBarSpinner {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.6);
-  animation: spin 1s linear infinite;
-  pointer-events: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    animation: spin 1s linear infinite;
+    pointer-events: none;
 }
 
 /* Optional rotation animation */
 @keyframes spin {
-  0% { transform: translateY(-50%) rotate(0deg); }
-  100% { transform: translateY(-50%) rotate(360deg); }
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(360deg); }
 }

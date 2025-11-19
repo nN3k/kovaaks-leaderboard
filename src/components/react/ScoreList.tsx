@@ -1,5 +1,5 @@
 import { useStore } from "@nanostores/react";
-import { selectedScenarioId, selectedScenarioName, verifiedChecked } from "../../data/nanostore/stores";
+import { selectedScenarioId, selectedScenarioName, verifiedChecked } from "../../data/nanostores/stores";
 import { useEffect, useState } from "react";
 
 const ScoreList = () => {

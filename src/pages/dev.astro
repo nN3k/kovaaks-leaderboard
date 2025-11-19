@@ -1,4 +1,6 @@
 ---
+//-------------- JUST FOR TESTING PURPOSES --------------//
+
 import SearchScenarioInput from '../components/react/SearchScenarioInput';
 import Layout from '../layouts/BaseLayout.astro';
 import ScenarioList from "../components/react/ScenarioList";
@@ -18,6 +20,10 @@ import DevLogin from '../components/dev/Login';
 
 <Layout>
 	<div class="innerGrid">
+		<InputSteamId client:load/>
+		<DevLogin client:load/>
+		<ShowSteam client:load/>
+		<LogoutButton client:load/>
 		<div class="searchScenarioBundle">
 			<SearchScenarioInput client:load/>
 			<ScenarioList client:load/>
@@ -30,5 +36,6 @@ import DevLogin from '../components/dev/Login';
 			<ScoreList client:load/>
 		</div>
 	</div>
+	<SteamProfile client:load/>
 	<SideBar/>
 </Layout>

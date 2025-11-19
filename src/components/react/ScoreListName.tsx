@@ -1,12 +1,12 @@
 import { useStore } from "@nanostores/react";
-import { selectedScenarioName } from "../../data/nanostore/stores";
+import { selectedScenarioName } from "../../data/nanostores/stores";
 import "../../styles/scoreListName.css";
 
 const ScoreListNameComponent = () => {
 
-  const selectedScenarioNAME = useStore(selectedScenarioName);
+    const selectedScenarioNAME = useStore(selectedScenarioName);
 
-    return <p className="scenarioName">{selectedScenarioNAME}</p>;
+        return <p className="scenarioName">{selectedScenarioNAME}</p>;
 };
 
 export default ScoreListNameComponent;
