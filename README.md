@@ -1,6 +1,11 @@
 
 # Raw Aim
 
+
+PLEACE CLONE AND EMAIL ME AFTERWARDS
+THIS IS A PRIVATE REPOSITORY
+ON THE THE 26 OF NOVEMBER THIS REPOSITORY WILL BE MADE PRIVATE AGAIN IF NO CONTACT IS INITIATED
+
 Like in speedrunning a run is only accepted if a VOD of the run linked in the submition.
 Kovaak's does not have this feature. When someone cheats and does not get cought by the Anti-Cheat their run is accepted. Some known and trusted members of this community wished for a mandetory VOD to be submitted in higher ranks. This is the idea behind Raw Aim.
 
