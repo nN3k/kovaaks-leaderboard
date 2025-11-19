@@ -15,10 +15,10 @@ https://raw-aim.netlify.app/
 - Finish learning everything needed for this project -> How to use Databases and Turso
 
 - Implement all planed features
-![]([https://github.com/nN3k/kovaaks-leaderboard/blob/master/README_ASSETS/features?raw=true](https://raw.githubusercontent.com/nN3k/kovaaks-leaderboard/refs/heads/master/README_ASSETS/features.jpg?token=GHSAT0AAAAAADOZQLU7RJU4KA6H5BXF5VP62I53NCQ))
+![](https://github.com/user-attachments/assets/74b5557c-21bf-4372-82e6-84ffcbd329f0)
 
 - Finish UI
-![]([https://github.com/nN3k/kovaaks-leaderboard/blob/master/README_ASSETS/design?raw=true](https://raw.githubusercontent.com/nN3k/kovaaks-leaderboard/refs/heads/master/README_ASSETS/design.jpg?token=GHSAT0AAAAAADOZQLU7Q4SIPWYV2UXVTAMW2I53MRQ))
+![](https://github.com/user-attachments/assets/432912e6-dc44-4fab-99bd-aedba2fdc9cd)
 
 - Clean up every file that was meant for testing and learning
 
