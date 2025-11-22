@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev-prod-db": "astro dev --remote",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -12,6 +13,7 @@
     "@astrojs/db": "^0.18.2",
     "@astrojs/netlify": "^6.6.0",
     "@astrojs/react": "^4.4.0",
+    "@astrojs/vercel": "^9.0.1",
     "@nanostores/react": "^1.0.0",
     "@tailwindcss/vite": "^4.1.16",
     "@types/react": "^19.2.2",

@@ -14,6 +14,7 @@
         "npm:@astrojs/db@~0.18.2",
         "npm:@astrojs/netlify@^6.6.0",
         "npm:@astrojs/react@^4.4.0",
+        "npm:@astrojs/vercel@^9.0.1",
         "npm:@nanostores/react@1",
         "npm:@tailwindcss/vite@^4.1.16",
         "npm:@types/react-dom@^19.2.2",

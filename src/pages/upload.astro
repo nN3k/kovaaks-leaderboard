@@ -1,0 +1,10 @@
+---
+import SearchBar from '../components/react/SearchScenarioInput';
+import Layout from '../layouts/BaseLayout.astro';
+import ScenarioList from "../components/react/ScenarioList";
+---
+
+<Layout>
+    <SearchBar client:load />
+    <ScenarioList client:load />
+</Layout>

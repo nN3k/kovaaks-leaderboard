@@ -4,14 +4,16 @@ import { z } from "astro:schema";
 
 export const server = {
     addProfile: defineAction({
-        accept: "form",
+        accept: "json",
         input: z.object({
-            id: z.string(),
+            id: z.number(),
             name: z.string(),
         }),
         handler: async ({ id, name }) => {
-            //await db.insert(Profile).values({ id, name });
-            return true;
+            return await db.insert(Profile).values({
+                steamId: id,
+                steamName: name
+            } );
         },
     }),
 };

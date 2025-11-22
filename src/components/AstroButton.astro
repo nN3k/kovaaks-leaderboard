@@ -1,15 +1,27 @@
 ---
+
 ---
 
-<button id="run-server">Run Server Code</button>
+
+<button id="action">ACTION</button>
+<script>
+import { actions } from "astro:actions";
+
+const button = document.getElementById('action');
+button?.addEventListener('click', async () => {
+    await actions.addProfile({ id: 1234567890, name: "TestUser" });
+});
+</script>
+
+<!-- <button id="run-server">Run Server Code</button>
 
 <script>
     const element = document.getElementById('run-server')
     if (element != null) {
         element.addEventListener('click', async (event) => {
-            event.preventDefault(); // 🔥 prevents page reload / navigation
+            event.preventDefault(); // prevents page reload / navigation
             const res = await fetch('/api/run-server-code', { method: 'POST' });
             const data = await res.json();
         });
     }
-</script>
+</script> -->

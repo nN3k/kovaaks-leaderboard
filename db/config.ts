@@ -7,7 +7,7 @@ const Profile = defineTable({
   columns: {
     steamId: column.number(),
     steamName: column.text(),
-    country: column.text({ default: "/" }),
+    country: column.text({ default: '"/"' }),
     isBanned: column.boolean({ default: false }),
   }
 })

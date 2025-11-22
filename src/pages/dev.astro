@@ -14,12 +14,14 @@ import ShowSteam from '../components/react/CheckLogin';
 import SteamProfile from '../components/react/SteamProfile';
 import InputSteamId from '../components/dev/InputSteamId';
 import DevLogin from '../components/dev/Login';
-
+import UploadRun from '../components/react/UploadRun';
 
 ---
 
 <Layout>
 	<div class="innerGrid">
+		<UploadRun client:load/>
+		<div></div>
 		<InputSteamId client:load/>
 		<DevLogin client:load/>
 		<ShowSteam client:load/>
