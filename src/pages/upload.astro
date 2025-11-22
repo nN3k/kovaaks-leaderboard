@@ -2,9 +2,11 @@
 import SearchBar from '../components/react/SearchScenarioInput';
 import Layout from '../layouts/BaseLayout.astro';
 import ScenarioList from "../components/react/ScenarioList";
+import UploadRun from '../components/react/UploadRun';
 ---
 
 <Layout>
+    <UploadRun client:load />
     <SearchBar client:load />
     <ScenarioList client:load />
 </Layout>

@@ -1,11 +1,11 @@
 import { useStore } from "@nanostores/react";
 import { selectedScenarioId } from "../../data/nanostores/stores";
 import { useEffect, useState } from "react";
-import { set } from "astro:schema";
 
 const UploadRunComponent = () => {
     const selectedScenarioID = useStore(selectedScenarioId);
     const [user, setUser] = useState<{ loggedIn: boolean; steamId?: string } | null>(null);
+    const [profile , setProfile] = useState<any>(null);
     const [validUser, setValidUser] = useState(false);
     const [vod, setVodLink] = useState("");
 
@@ -14,6 +14,34 @@ const UploadRunComponent = () => {
     const handleChange = (link: string) => {
         setVodLink(link);
     }
+
+    async function fetchProfile() {
+        const response = await fetch("/.netlify/functions/steam-profile", { credentials: "include" });
+        const data = await response.json();
+        setProfile(data);
+        return data; 
+    }
+
+
+    async function insertProfile() {
+        const data = await fetchProfile(); // get JSON directly
+        if (!user?.steamId || !data?.personaname) {
+            alert("Cannot insert profile: missing Steam ID or name");
+            return;
+        }
+
+        await fetch("/api/profiles/insert.json", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+            steamId: user.steamId,
+            steamName: data.personaname,
+            country: data.loccountrycode,
+            isBanned: false,
+            }),
+        });
+    }
+
 
     const onSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
@@ -43,7 +71,7 @@ const UploadRunComponent = () => {
             return;
         }
 
-        //TODO: Upload to databse here
+        insertProfile();
         console.log("Submitted VOD:", vod);
     }
 

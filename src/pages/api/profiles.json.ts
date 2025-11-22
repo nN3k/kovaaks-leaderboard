@@ -2,7 +2,7 @@
 import type { APIRoute } from 'astro';
 import { db, Profile } from 'astro:db';
 
-export const prerender = false; // ← Add this line
+export const prerender = false;
 
 export const GET: APIRoute = async () => {
     try {
