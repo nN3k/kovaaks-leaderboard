@@ -30,7 +30,7 @@ const UploadRunComponent = () => {
             return;
         }
 
-        await fetch("/api/profiles/insert.json", {
+        await fetch("/api/profiles/insert", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

@@ -3,7 +3,7 @@ import { column, defineDb, defineTable } from 'astro:db';
 // https://astro.build/db/config
 
 
-const Profile = defineTable({
+const profile = defineTable({
   columns: {
     steamId: column.number(),
     steamName: column.text(),
@@ -15,26 +15,26 @@ const Profile = defineTable({
 
 //--------Layouts------------------------------
 // Tables won't be used. Just to know the layout
-const LeaderboardLayout = defineTable({
+const leaderboard_layout = defineTable({
   columns: {
-    playerSteamId: column.number({ references: () => Profile.columns.steamId }),
+    playerSteamId: column.number({ references: () => profile.columns.steamId }),
     rank: column.number(),
     score: column.number(),
-    playerName: column.text({ references: () => Profile.columns.steamName })
+    playerName: column.text({ references: () => profile.columns.steamName })
   }
 })
 
-const LeaderboardSettingsLayout = defineTable({
+const leaderboard_settings_layout = defineTable({
   columns: {
     sense: column.number(),
     fov: column.number(),
     fovScaling: column.text(),
     avgFps: column.number(),
-    country: column.text({ references: () => Profile.columns.country })
+    country: column.text({ references: () => profile.columns.country })
   }
 })
 //--------End of Layouts-----------------------
 
 export default defineDb({
-  tables: { Profile }
+  tables: { profile }
 });

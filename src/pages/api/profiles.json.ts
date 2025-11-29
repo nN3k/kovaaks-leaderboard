@@ -1,12 +1,12 @@
 // src/pages/api/profiles.json.ts
 import type { APIRoute } from 'astro';
-import { db, Profile } from 'astro:db';
+import { db, profile } from 'astro:db';
 
 export const prerender = false;
 
 export const GET: APIRoute = async () => {
     try {
-        const profiles = await db.select().from(Profile).all();
+        const profiles = await db.select().from(profile).all();
         
         return new Response(JSON.stringify(profiles), {
             status: 200,
