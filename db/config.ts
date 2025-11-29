@@ -5,7 +5,7 @@ import { column, defineDb, defineTable } from 'astro:db';
 
 const profile = defineTable({
   columns: {
-    steamId: column.number(),
+    steamId: column.text(),
     steamName: column.text(),
     country: column.text({ default: '"/"' }),
     isBanned: column.boolean({ default: false }),
@@ -17,7 +17,7 @@ const profile = defineTable({
 // Tables won't be used. Just to know the layout
 const leaderboard_layout = defineTable({
   columns: {
-    playerSteamId: column.number({ references: () => profile.columns.steamId }),
+    playerSteamId: column.text({ references: () => profile.columns.steamId }),
     rank: column.number(),
     score: column.number(),
     playerName: column.text({ references: () => profile.columns.steamName })
