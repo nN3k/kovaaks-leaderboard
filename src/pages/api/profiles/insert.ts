@@ -2,13 +2,50 @@
 import type { APIRoute } from "astro";
 import { createClient } from "@libsql/client";
 
-export const prerender = false;
 
 // Turso client
 const db = createClient({
     url: process.env.TURSO_DATABASE_URL!,
     authToken: process.env.TURSO_AUTH_TOKEN!,
 });
+
+export async function profileExists(steamId: string) {
+  const result = await db.execute({
+    sql: "SELECT 1 FROM profiles WHERE SteamId = ? LIMIT 1",
+    args: [steamId],
+  });
+
+  return result.rows.length > 0;
+}
+
+async function updateProfile(steamId: string, data: Record<string, any>) {
+    // 1. Fetch current profile
+    const current = await db.execute({
+        sql: "SELECT * FROM profiles WHERE SteamId = ? LIMIT 1",
+        args: [steamId],
+    });
+
+    if (current.rows.length === 0) return; // no profile found
+
+    const profile = current.rows[0];
+
+    // 2. Determine which fields changed
+    const changedEntries = Object.entries(data).filter(
+        ([key, value]) => profile[key] !== value
+    );
+
+    if (changedEntries.length === 0) return; // nothing to update
+
+    // 3. Build update query only for changed fields
+    const setClause = changedEntries.map(([k]) => `${k} = ?`).join(", ");
+    const values = changedEntries.map(([, v]) => v);
+
+    // 4. Perform update
+    await db.execute({
+        sql: `UPDATE profiles SET ${setClause} WHERE SteamId = ?`,
+        args: [...values, steamId],
+    });
+}
 
 export const POST: APIRoute = async ({ request }) => {
     try {
@@ -20,6 +57,23 @@ export const POST: APIRoute = async ({ request }) => {
                 JSON.stringify({ error: "steamId and steamName are required" }),
                 {
                     status: 400,
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+        }
+
+        if (await profileExists(data.steamId)) {
+            await updateProfile(data.steamId, {
+                SteamName: data.steamName,
+                Country: data.country,
+                isBanned: data.isBanned,
+            });
+
+
+            return new Response(
+                JSON.stringify({ error: "Profile with this steamId already exists and has been updated" }),
+                {
+                    status: 200,
                     headers: { "Content-Type": "application/json" },
                 }
             );

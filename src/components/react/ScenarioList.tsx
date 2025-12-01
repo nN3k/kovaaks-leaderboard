@@ -1,4 +1,4 @@
-import { changeSelectedScenarioId, changeSelectedScenarioName, scenarioSearchValue } from "../../data/nanostores/stores";
+import { changeSelectedScenarioId, changeSelectedScenarioName, scenarioSearchValue, selectedScenarioName } from "../../data/nanostores/stores";
 import { useStore } from "@nanostores/react";
 import "../../styles/lists.css"
 
@@ -9,6 +9,7 @@ const scenarioListComponent = () => {
 
     const displayClickedLeaderboard = (e: any) => {
         changeSelectedScenarioName(e.target.className);
+        console.log("Clicked scenario: " + selectedScenarioName.get());
         changeSelectedScenarioId(e.target.id);
     }
 

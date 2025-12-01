@@ -1,5 +1,5 @@
 import { useStore } from "@nanostores/react";
-import { selectedScenarioId } from "../../data/nanostores/stores";
+import { selectedScenarioId, selectedScenarioName } from "../../data/nanostores/stores";
 import { useEffect, useState } from "react";
 
 const UploadRunComponent = () => {
@@ -8,6 +8,7 @@ const UploadRunComponent = () => {
     const [profile , setProfile] = useState<any>(null);
     const [validUser, setValidUser] = useState(false);
     const [vod, setVodLink] = useState("");
+    const [score, setScore] = useState<number>(0.0);
 
     let kovaaksScenarioRank = 0;
 
@@ -42,10 +43,25 @@ const UploadRunComponent = () => {
         });
     }
 
+    async function insertRun(Score: number, vod: string) {
+        const data = await fetchProfile(); // get JSON directly
+        await fetch("/api/scenarios/insert", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                steamId: user?.steamId,
+                score: Score,
+                vod: vod,
+                scenarioName: selectedScenarioName.get()
+            }),
+        });
+    }
+
 
     const onSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         let validLink = false;
+        let vodLink = "";
 
         if (!user || !user.loggedIn) {
             alert("Please log in to submit a run");
@@ -58,8 +74,10 @@ const UploadRunComponent = () => {
 
         if (vod.startsWith("https://www.youtube.com/watch?v=")) {
             validLink = true;
+            vodLink = vod.slice(32);
         } else if (vod.startsWith("https://youtu.be/")) {
             validLink = true;
+            vodLink = vod.slice(17);
         }
         
         if (!validLink) {
@@ -72,6 +90,7 @@ const UploadRunComponent = () => {
         }
 
         insertProfile();
+        insertRun(score, vodLink);
         console.log("Submitted VOD:", vod);
     }
 
@@ -98,10 +117,10 @@ const UploadRunComponent = () => {
             kovaaksScenarioRank = 0;
             setValidUser(false);
             for (let i = 0; i < 50; i++) {
-                console.log("Comparing", data.data[i].steamId, "to", user?.steamId);
                 if (data.data[i].steamId == user?.steamId) {
                     kovaaksScenarioRank = i + 1;
                     setValidUser(true);
+                    setScore(data.data[i].score);
                     break;
                 }
             }
