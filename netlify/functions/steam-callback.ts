@@ -22,8 +22,8 @@ export const handler: Handler = async (event) => {
             return { statusCode: 400, body: 'Invalid Steam ID' };
         }
 
-        // Set HTTP-only cookie for login
-        const cookie = serialize('steamId', steamId, {
+
+        const steamIdCookie = serialize('steamId', steamId, {
             httpOnly: true,
             path: '/',
             maxAge: 60 * 60 * 24 * 7, // 1 week
@@ -31,11 +31,46 @@ export const handler: Handler = async (event) => {
             sameSite: 'lax',
         });
 
+
+        let personaNameCookie = "";
+        let avatarCookie = "";
+
+        try {
+            const res = await fetch('/.netlify/functions/steam-profile', {
+                credentials: 'include',
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            
+            personaNameCookie = serialize('personaName', data.personaname, {
+                httpOnly: false,
+                path: '/',
+                maxAge: 60 * 60 * 24 * 7, // 1 week
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+            });
+
+            avatarCookie = serialize('avatar', data.avatarfull, {
+                httpOnly: false,
+                path: '/',
+                maxAge: 60 * 60 * 24 * 7, // 1 week
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+            });
+
+        } catch (e: any) {
+            // Handle fetch error if needed
+        }
+
         return {
             statusCode: 302,
-            headers: {
-                'Set-Cookie': cookie,
-                Location: '/', // redirect to home page
+            multiValueHeaders: {
+                'Set-Cookie': [
+                    steamIdCookie,
+                    personaNameCookie,
+                    avatarCookie
+                    ],
+                Location: ['/'],
             },
         };
     } catch (err) {

@@ -1,35 +1,71 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function SteamProfile() {
+const SteamProfile = () => {
     const [profile, setProfile] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        (async () => {
+        // Parse cookies into an object
+        const cookies = Object.fromEntries(
+            document.cookie.split("; ").map((c) => {
+                const [key, value] = c.split("=");
+                return [key, decodeURIComponent(value)];
+            })
+        );
+        console.log("Cookies:", cookies);
+
+        const checkLogin = async () => {
             try {
-                const res = await fetch('/.netlify/functions/steam-profile', {
-                    credentials: 'include',
+                const res = await fetch("/.netlify/functions/check-login", {
+                    credentials: "include",
                 });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
-                setProfile(data);
-            } catch (e: any) {
-                setError(e.message);
+
+                if (data.loggedIn) {
+                    // Extract personaName + avatar from cookies 
+                    const personaName = cookies.personaName || null;
+                    const avatar = cookies.avatar || null;
+
+                    if (personaName && avatar) {
+                        setProfile({
+                            personaName,
+                            avatar
+                        });
+                    } else {
+                        setError("Missing profile cookies");
+                    }
+                } else {
+                    setProfile(null);
+                }
+            } catch (err: any) {
+                setError(err.message || "Something went wrong");
             }
-        })();
+        };
+
+        checkLogin();
     }, []);
 
-    if (error) return <p>Error: {error}</p>;
+
+    if (error) return <p>{error}</p>;
     if (!profile) return <p>Loading...</p>;
 
+
     return (
-        <div>
-            <img
-                src={profile.avatarfull}
-                alt={profile.personaname}
-                style={{ borderRadius: '50%', width: 80, height: 80 }}
-            />
-            <p>{profile.personaname}</p>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            {profile.avatar && (
+                <img
+                    src={profile.avatar}
+                    alt={profile.personaName || ""}
+                    style={{ borderRadius: "50%", width: 50, height: 50 }}
+                />
+            )}
+            <div>
+                {profile.personaName && <p>{profile.personaName}</p>}
+            </div>
         </div>
     );
-}
+
+
+};
+
+export default SteamProfile;
