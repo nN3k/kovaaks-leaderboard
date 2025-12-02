@@ -55,13 +55,15 @@ li:hover {
 
 
 .mainGrid {
-    display: grid;
+    display: flex;
+    justify-content: space-between;
     grid-template-columns: 4fr 1fr;
 }
 
 .innerGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    width: 100rem;
 }
 
 .searchScenarioBundle {

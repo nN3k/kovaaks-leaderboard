@@ -5,6 +5,10 @@
 
 .sideBarDiv {
     background-color: #1a2336;
+    justify-content: end;
+    width: max-content;
     right: 0;
-    position:absolute;
+    height: auto;
+    max-height: max-content;
+    object-fit: cover;
 }
