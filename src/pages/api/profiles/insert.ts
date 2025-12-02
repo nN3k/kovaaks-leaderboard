@@ -51,7 +51,7 @@ export const POST: APIRoute = async ({ request }) => {
     try {
         const data = await request.json();
 
-        // Validate required fields
+
         if (!data.steamId || !data.steamName) {
             return new Response(
                 JSON.stringify({ error: "steamId and steamName are required" }),
@@ -96,7 +96,7 @@ export const POST: APIRoute = async ({ request }) => {
             args.push(data.isBanned);
         }
 
-        // Execute insert
+
         const sql = `INSERT INTO profiles (${columns.join(
             ", "
         )}) VALUES (${placeholders.join(", ")})`;

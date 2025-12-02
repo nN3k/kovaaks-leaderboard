@@ -25,12 +25,12 @@ const InputSteamId = () => {
                 
     }, [debouncedInput]);
 
-    // Handle typing
+
     const handleChange = (value: string) => {
         setInput(value);
     };
 
-    // Physical Component
+
     return (
         <div>
             <div>

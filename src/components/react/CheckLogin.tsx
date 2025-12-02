@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 
-//checking if user is logged in
 const ShowSteam = () => {
     const [user, setUser] = useState<{ steamId: string } | null>(null);
 

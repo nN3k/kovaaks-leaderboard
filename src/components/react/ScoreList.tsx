@@ -11,7 +11,7 @@ const ScoreList = () => {
         const controller = new AbortController();
         const { signal } = controller;
 
-        if (!selectedScenarioId) return; // guard for initial empty value
+        if (!selectedScenarioId) return;
 
         if (verifiedList) {
             //TODO
@@ -40,7 +40,7 @@ const ScoreList = () => {
         }
     }, [selectedScenarioID]); // refetch when Nanostore value changes
 
-  //----------Physical component----------
+
     return (
         <div className="scoreList">
             <table>
@@ -64,6 +64,6 @@ const ScoreList = () => {
         </div>
     );
 };
-//----------End of Physical component----------
+
 
 export default ScoreList;

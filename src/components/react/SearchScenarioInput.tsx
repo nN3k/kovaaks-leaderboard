@@ -68,12 +68,12 @@ const SearchBarComponent = () => {
         return () => controller.abort();
     }, [debouncedInput]);
 
-    // Handle typing
+
     const handleChange = (value: string) => {
         setInput(value);
     };
 
-    // Physical Component
+
     return (
         <div className="searchBarContainer">
             <div className="searchInputWrapper">

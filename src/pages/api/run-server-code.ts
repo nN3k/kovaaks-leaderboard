@@ -1,6 +1,4 @@
 import type { APIRoute } from 'astro';
-import { actions } from 'astro:actions';
-import { db, Profile } from 'astro:db';
 
 export const prerender = false;
 

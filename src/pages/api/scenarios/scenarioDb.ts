@@ -10,7 +10,6 @@ export const db = createClient({
 const metaTable = quoteSqlIdentifier("ScenarioNames");
 
 
-
 /**
  * Safely quotes an SQL identifier (table or column name)
  * by doubling internal quotes and wrapping in double quotes.
@@ -41,7 +40,7 @@ export function normalizeScenarioName(rawName: string): string {
     return `${truncated}_${hash}`;
 }
 
-// Get the original scenario name from the normalized name
+
 export async function getOriginalScenarioName(normalizedName: string): Promise<string | null> {
 
     const result = await db.execute({
@@ -51,7 +50,6 @@ export async function getOriginalScenarioName(normalizedName: string): Promise<s
 
     const value = result.rows?.[0]?.[0];
 
-    // Ensure it's a string or return null
     if (typeof value === "string") {
         return value;
     }
@@ -60,10 +58,6 @@ export async function getOriginalScenarioName(normalizedName: string): Promise<s
 }
 
 
-
-/**
- * Ensures the scenario table exists with correct schema and indexes.
- */
 export async function ensureTableExists(scenarioName: string) {
 
     await db.execute(`
@@ -98,7 +92,7 @@ export async function ensureTableExists(scenarioName: string) {
         CREATE INDEX IF NOT EXISTS ${indexScore} ON ${table} (Score DESC, CreatedAt ASC)
     `);
 
-    // Insert mapping into single ScenarioMeta table (one row per scenario)
+    // Insert mapping into ScenarioMeta table
     await db.execute({
         sql: `
             INSERT OR IGNORE INTO ${metaTable} (NormalizedName, OriginalName)

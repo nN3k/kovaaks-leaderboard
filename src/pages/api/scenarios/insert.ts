@@ -9,10 +9,10 @@ export const POST: APIRoute = async ({ request }) => {
             return new Response(JSON.stringify({ error: 'Missing data' }), { status: 400 });
         }
 
-        // Ensure the scenario table exists and get the normalized table name
+
         const normalizedTableName = await ensureTableExists(scenarioName);
 
-        // Safely quote the table name for SQL
+
         const table = quoteSqlIdentifier(normalizedTableName);
 
         // Insert or update score if the new score is higher

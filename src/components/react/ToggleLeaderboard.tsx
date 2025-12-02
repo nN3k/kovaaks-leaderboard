@@ -10,7 +10,7 @@ const ToggleLeaderboardComponent = () => {
         changeVerifiedChecked(e.target.checked);
     }
 
-    // Physical Component
+
     return (
         <div className="bundle">
             <p>VERIFIED:</p>

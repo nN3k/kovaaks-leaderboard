@@ -2,7 +2,7 @@ import { steamId } from "../../data/nanostores/stores";
 
 const DevLogin = () => {
     const handleLogin = async () => {
-        const id = steamId.get(); // read the Nanostore
+        const id = steamId.get();
 
         const res = await fetch("/.netlify/functions/dev-login", {
             method: "POST",
@@ -11,7 +11,6 @@ const DevLogin = () => {
         });
 
         if (res.ok) {
-            // redirect after cookie is set
             window.location.href = "/";
         } else {
             alert("Login failed");

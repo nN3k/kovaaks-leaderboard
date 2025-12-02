@@ -5,14 +5,13 @@ const SteamProfile = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Parse cookies into an object
+        // Parse cookies
         const cookies = Object.fromEntries(
             document.cookie.split("; ").map((c) => {
                 const [key, value] = c.split("=");
                 return [key, decodeURIComponent(value)];
             })
         );
-        console.log("Cookies:", cookies);
 
         const checkLogin = async () => {
             try {

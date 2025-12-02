@@ -9,11 +9,10 @@ const scenarioListComponent = () => {
 
     const displayClickedLeaderboard = (e: any) => {
         changeSelectedScenarioName(e.target.className);
-        console.log("Clicked scenario: " + selectedScenarioName.get());
         changeSelectedScenarioId(e.target.id);
     }
 
-    //----------Physical component----------
+
     return(
         <div className="scenarioList">
             <table>
@@ -36,7 +35,7 @@ const scenarioListComponent = () => {
             </table>
         </div>
     );
-    //----------End of Physical component----------
+
 };
 
 export default scenarioListComponent;
