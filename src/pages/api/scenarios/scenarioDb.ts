@@ -1,36 +1,111 @@
 import { createClient } from "@libsql/client";
+import crypto from "crypto";
 
-const db = createClient({
+export const db = createClient({
     url: process.env.TURSO_DATABASE_URL!,
     authToken: process.env.TURSO_AUTH_TOKEN!,
 });
 
-export async function ensureTableExists(tableName: string) {
+
+const metaTable = quoteSqlIdentifier("ScenarioNames");
+
+
+
+/**
+ * Safely quotes an SQL identifier (table or column name)
+ * by doubling internal quotes and wrapping in double quotes.
+ */
+export function quoteSqlIdentifier(name: string): string {
+    const escaped = name.replace(/"/g, '""');
+    return `"${escaped}"`;
+}
+
+/**
+ * Normalize a scenario name into a safe SQL identifier.
+ * - Keeps letters, numbers, underscores, and allowed symbols.
+ * - Replaces other characters with underscores.
+ * - Truncates long names.
+ * - Appends a short hash for uniqueness.
+ */
+export function normalizeScenarioName(rawName: string): string {
+    // Allow letters, numbers, underscores, dash, plus, @, pipe, tilde
+    const safeName = rawName.replace(/[^a-zA-Z0-9_\-+@|~]/g, "_");
+
+    // Compute a short hash (first 8 chars of SHA1) for uniqueness
+    const hash = crypto.createHash("sha1").update(rawName).digest("hex").slice(0, 8);
+
+    // Truncate the safeName to leave room for hash if too long
+    const maxLength = 50; // adjust to leave room for "_<hash>"
+    const truncated = safeName.length > maxLength ? safeName.slice(0, maxLength) : safeName;
+
+    return `${truncated}_${hash}`;
+}
+
+// Get the original scenario name from the normalized name
+export async function getOriginalScenarioName(normalizedName: string): Promise<string | null> {
 
     const result = await db.execute({
-        sql: `SELECT name FROM sqlite_master WHERE type='table' AND name = ?`,
-        args: [tableName],
+        sql: `SELECT OriginalName FROM ${metaTable} WHERE NormalizedName = ?`,
+        args: [normalizedName],
     });
 
-    if (result.rows.length === 0) {
-        // table does not exist, create it
-        await db.execute(`
-        CREATE TABLE "${tableName}" (
+    const value = result.rows?.[0]?.[0];
+
+    // Ensure it's a string or return null
+    if (typeof value === "string") {
+        return value;
+    }
+
+    return null;
+}
+
+
+
+/**
+ * Ensures the scenario table exists with correct schema and indexes.
+ */
+export async function ensureTableExists(scenarioName: string) {
+
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS ${metaTable} (
+            NormalizedName TEXT PRIMARY KEY,
+            OriginalName TEXT NOT NULL
+        )
+    `);
+
+    const normalizedName = normalizeScenarioName(scenarioName);
+
+    const table = quoteSqlIdentifier(normalizedName);
+    const indexSteam = quoteSqlIdentifier(`idx_${normalizedName}_steamid`);
+    const indexScore = quoteSqlIdentifier(`idx_${normalizedName}_score`);
+
+    // Create the scenario table
+    await db.execute(`
+        CREATE TABLE IF NOT EXISTS ${table} (
             id INTEGER PRIMARY KEY,
             SteamId TEXT NOT NULL,
             Score REAL NOT NULL DEFAULT 0,
             VOD TEXT DEFAULT "",
             CreatedAt TEXT DEFAULT CURRENT_TIMESTAMP
         )
-        `);
-        await db.execute(`CREATE UNIQUE INDEX idx_${tableName}_steamid ON "${tableName}"(SteamId)`);
-        await db.execute(`CREATE INDEX idx_${tableName}_score ON "${tableName}"(Score DESC, CreatedAt ASC)`);
-    } else {
-        // table exists, make sure VOD column exists
-        const info = await db.execute({ sql: `PRAGMA table_info("${tableName}")` });
-        const columns = info.rows.map(row => row[1]);
-        if (!columns.includes("VOD")) {
-        await db.execute(`ALTER TABLE "${tableName}" ADD COLUMN VOD TEXT DEFAULT ""`);
-        }
-    }
+    `);
+
+    // Create indexes
+    await db.execute(`
+        CREATE UNIQUE INDEX IF NOT EXISTS ${indexSteam} ON ${table} (SteamId)
+    `);
+    await db.execute(`
+        CREATE INDEX IF NOT EXISTS ${indexScore} ON ${table} (Score DESC, CreatedAt ASC)
+    `);
+
+    // Insert mapping into single ScenarioMeta table (one row per scenario)
+    await db.execute({
+        sql: `
+            INSERT OR IGNORE INTO ${metaTable} (NormalizedName, OriginalName)
+            VALUES (?, ?)
+        `,
+        args: [normalizedName, scenarioName]
+    });
+
+    return normalizedName;
 }

@@ -1,9 +1,9 @@
-import { db, Profile } from 'astro:db';
+import { db, profile } from 'astro:db';
 
 // https://astro.build/db/seed
 export default async function seed() {
-	await db.insert(Profile).values({
-		steamId: 0,
+	await db.insert(profile).values({
+		steamId: "0",
 		steamName: 'Seeded User',
 		country: 'GER',
 		isBanned: false,

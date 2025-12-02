@@ -1,5 +1,18 @@
 import { column, defineDb, defineTable } from 'astro:db';
 
+
+/*
+I create this table in Turso dashboard manually to track scenario tables
+
+await db.execute(`
+  CREATE TABLE IF NOT EXISTS ${metaTable} (
+    TableName TEXT PRIMARY KEY,      -- normalized table name
+    OriginalName TEXT NOT NULL       -- original scenario name
+  )
+`);
+*/
+
+
 // https://astro.build/db/config
 
 
@@ -11,6 +24,7 @@ const profile = defineTable({
     isBanned: column.boolean({ default: false }),
   }
 })
+
 
 
 //--------Layouts------------------------------

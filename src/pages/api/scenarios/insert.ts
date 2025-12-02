@@ -1,11 +1,5 @@
 import type { APIRoute } from 'astro';
-import { createClient } from '@libsql/client';
-import { ensureTableExists } from './scenarioDb';
-
-const db = createClient({
-    url: process.env.TURSO_DATABASE_URL!,
-    authToken: process.env.TURSO_AUTH_TOKEN!,
-});
+import { db, ensureTableExists, quoteSqlIdentifier } from './scenarioDb';
 
 export const POST: APIRoute = async ({ request }) => {
     try {
@@ -15,47 +9,38 @@ export const POST: APIRoute = async ({ request }) => {
             return new Response(JSON.stringify({ error: 'Missing data' }), { status: 400 });
         }
 
-        // sanitize table name
-        const tableName = scenarioName.replace(/[^a-zA-Z0-9_]/g, '_');
+        // Ensure the scenario table exists and get the normalized table name
+        const normalizedTableName = await ensureTableExists(scenarioName);
 
-        // ensure table exists
-        await ensureTableExists(tableName);
+        // Safely quote the table name for SQL
+        const table = quoteSqlIdentifier(normalizedTableName);
 
-        // insert or update only if the new score is higher
+        // Insert or update score if the new score is higher
         await db.execute({
             sql: `
-                INSERT INTO "${tableName}" (SteamId, Score, VOD)
+                INSERT INTO ${table} (SteamId, Score, VOD)
                 VALUES (?, ?, ?)
                 ON CONFLICT(SteamId) DO UPDATE SET
                     Score = CASE
-                        WHEN excluded.Score > "${tableName}".Score
-                        THEN excluded.Score
-                        ELSE "${tableName}".Score
-                    END,
+                        WHEN excluded.Score > Score THEN excluded.Score ELSE Score END,
                     VOD = CASE
-                        WHEN excluded.Score > "${tableName}".Score
-                        THEN excluded.VOD
-                        ELSE "${tableName}".VOD
-                    END
+                        WHEN excluded.Score > Score THEN excluded.VOD ELSE VOD END
             `,
             args: [steamId, score, vod],
         });
 
-        // check row count
+        // Count rows to enforce top 50 scores
         const countResult = await db.execute({
-            sql: `SELECT COUNT(*) as cnt FROM "${tableName}"`
+            sql: `SELECT COUNT(*) as cnt FROM ${table}`
         });
-
-        // safely get row count as a number
         const rowCount = Number(countResult.rows?.[0]?.[0] ?? 0);
 
-        // delete lowest scores if more than 50
         if (rowCount > 50) {
             await db.execute({
                 sql: `
-                    DELETE FROM "${tableName}"
+                    DELETE FROM ${table}
                     WHERE id IN (
-                        SELECT id FROM "${tableName}"
+                        SELECT id FROM ${table}
                         ORDER BY Score ASC, CreatedAt ASC
                         LIMIT ?
                     )
@@ -64,8 +49,8 @@ export const POST: APIRoute = async ({ request }) => {
             });
         }
 
-
         return new Response(JSON.stringify({ success: true }), { status: 200 });
+
     } catch (err) {
         console.error(err);
         return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
