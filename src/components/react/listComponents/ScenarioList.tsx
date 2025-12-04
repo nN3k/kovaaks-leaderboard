@@ -1,6 +1,6 @@
 import { changeSelectedScenarioId, changeSelectedScenarioName, scenarioSearchValue, selectedScenarioName } from "../../../data/nanostores/stores";
 import { useStore } from "@nanostores/react";
-import "../../styles/lists.css"
+import "../../../styles/lists.css"
 
 
 const scenarioListComponent = () => {

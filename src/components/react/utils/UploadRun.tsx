@@ -1,9 +1,11 @@
 import { useStore } from "@nanostores/react";
 import { selectedScenarioId, selectedScenarioName } from "../../../data/nanostores/stores";
 import { useEffect, useState } from "react";
+import "../../../styles/uploadRun.css";
 
 const UploadRunComponent = () => {
     const selectedScenarioID = useStore(selectedScenarioId);
+    const scenarioName = useStore(selectedScenarioName);
 
     // User and Steam profile state
     const [user, setUser] = useState<{ loggedIn: boolean; steamId?: string } | null>(null);
@@ -13,116 +15,234 @@ const UploadRunComponent = () => {
     const [validUser, setValidUser] = useState(false);
     const [vod, setVodLink] = useState("");
     const [score, setScore] = useState<number>(0);
+    const [submitting, setSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<{
+        type: 'success' | 'error' | null;
+        message: string;
+    }>({ type: null, message: '' });
+    const [alertExiting, setAlertExiting] = useState(false);
 
-    // Handle input change for VOD
     const handleChange = (link: string) => setVodLink(link);
 
-    // Fetch Steam profile once and store in state
     const fetchProfile = async () => {
-        if (profile) return profile; // cache result
+        if (profile) return profile;
         const response = await fetch("/.netlify/functions/steam-profile", { credentials: "include" });
         const data = await response.json();
         setProfile(data);
         return data;
     };
 
-    // Extract YouTube video ID from URL
     const extractYouTubeId = (url: string) => {
         if (url.startsWith("https://www.youtube.com/watch?v=")) return url.slice(32);
         if (url.startsWith("https://youtu.be/")) return url.slice(17);
         return null;
     };
 
+
+    const showAlert = (type: 'success' | 'error', message: string) => {
+        setAlertExiting(false);
+        setSubmitStatus({ type, message });
+        
+        setTimeout(() => {
+            setAlertExiting(true);
+            setTimeout(() => {
+                setSubmitStatus({ type: null, message: '' });
+                setAlertExiting(false);
+            }, 300);
+        }, 5000);
+    };
+
+
+    const closeAlert = () => {
+        setAlertExiting(true);
+        setTimeout(() => {
+            setSubmitStatus({ type: null, message: '' });
+            setAlertExiting(false);
+        }, 300);
+    };
+
     // Submit both profile and run in a single flow
     const submitRun = async () => {
-        if (!user?.loggedIn) return alert("Please log in to submit a run");
-        if (!validUser) return alert("You must have a score on this scenario in the top 50 to submit a run");
+        if (!user?.loggedIn) {
+            showAlert('error', "Please log in to submit a run");
+            return;
+        }
+        
+        if (!validUser) {
+            showAlert('error', "You must have a score on this scenario in the top 50 to submit a run");
+            return;
+        }
 
         const videoId = extractYouTubeId(vod);
         if (!videoId) {
-            return alert(vod === "" ? "Please enter a YouTube link" : "Invalid YouTube link");
+            showAlert('error', vod === "" ? "Please enter a YouTube link" : "Invalid YouTube link");
+            return;
         }
 
-        const profileData = await fetchProfile();
-        if (!profileData?.personaname || !user?.steamId) {
-            return alert("Cannot submit: missing Steam ID or Steam name");
+        if (!score || score <= 0) {
+            showAlert('error', "Invalid score. Please verify your score is in the top 50.");
+            return;
         }
 
-        // Insert/update profile
-        await fetch("/api/profiles/insert", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                steamId: user.steamId,
-                steamName: profileData.personaname,
-                country: profileData.loccountrycode,
-                isBanned: false,
-            }),
-        });
+        setSubmitting(true);
+        setSubmitStatus({ type: null, message: '' });
 
-        // Insert/update run
-        await fetch("/api/scenarios/insert", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                steamId: user.steamId,
-                score,
-                vod: videoId,
-                scenarioName: selectedScenarioName.get(),
-            }),
-        });
+        try {
+            const profileData = await fetchProfile();
+            if (!profileData?.personaname || !user?.steamId) {
+                showAlert('error', "Cannot submit: missing Steam ID or Steam name");
+                return;
+            }
 
+            // Insert/update profile
+            const profileResponse = await fetch("/api/profiles/insert", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    steamId: user.steamId,
+                    steamName: profileData.personaname,
+                    country: profileData.loccountrycode,
+                    isBanned: false,
+                }),
+            });
+
+            if (!profileResponse.ok) {
+                throw new Error('Failed to update profile');
+            }
+
+            // Insert/update run
+            const scenarioResponse = await fetch("/api/scenarios/insert", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    steamId: user.steamId,
+                    score,
+                    vod: videoId,
+                    scenarioName: scenarioName,
+                }),
+            });
+
+            const scenarioResult = await scenarioResponse.json();
+
+            if (scenarioResponse.ok && scenarioResult.success) {
+                showAlert('success', "Run submitted successfully! It will appear in the leaderboard shortly.");
+                setVodLink("");
+            } else {
+                showAlert('error', scenarioResult.error || "Failed to submit run. Please try again.");
+            }
+
+        } catch (error) {
+            console.error("Submit error:", error);
+            showAlert('error', "An unexpected error occurred. Please try again.");
+        } finally {
+            setSubmitting(false);
+        }
     };
 
-    // Handle form submission
+
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         submitRun();
     };
 
-    // Check if user has a score in top 50 when scenario changes
+
     useEffect(() => {
-    const verifyUser = async () => {
-        let loginData;
-        try {
-            loginData = await fetch("/.netlify/functions/check-login").then(res => res.json());
-        } catch {
-            loginData = { loggedIn: false };
-        }
-        setUser(loginData);
+        const verifyUser = async () => {
+            let loginData;
+            try {
+                loginData = await fetch("/.netlify/functions/check-login").then(res => res.json());
+            } catch {
+                loginData = { loggedIn: false };
+            }
+            setUser(loginData);
 
-        if (!loginData.loggedIn) {
-            setValidUser(false);
-            return;
-        }
+            if (!loginData.loggedIn) {
+                setValidUser(false);
+                return;
+            }
 
-        const response = await fetch(
-            `https://kovaaks.com/webapp-backend/leaderboard/scores/global?leaderboardId=${selectedScenarioID}&page=0&max=50`
-        );
-        const data = await response.json();
+            const response = await fetch(
+                `https://kovaaks.com/webapp-backend/leaderboard/scores/global?leaderboardId=${selectedScenarioID}&page=0&max=50`
+            );
+            const data = await response.json();
 
-        const userEntry = data.data.find((entry: any) => entry.steamId === loginData.steamId);
-        if (userEntry) {
-            setValidUser(true);
-            setScore(userEntry.score);
-        } else {
-            setValidUser(false);
-            setScore(0);
-        }
-    };
+            const userEntry = data.data.find((entry: any) => entry.steamId === loginData.steamId);
+            if (userEntry) {
+                setValidUser(true);
+                setScore(userEntry.score);
+            } else {
+                setValidUser(false);
+                setScore(0);
+            }
+        };
 
-    verifyUser();
-}, [selectedScenarioID]); // only run when scenario changes
-
+        verifyUser();
+    }, [selectedScenarioID]);
 
     return (
-        <div>
-            <form onSubmit={onSubmit}>
-                <label>
-                    Youtube Link of the run:
-                    <input type="text" name="youtubeLink" onChange={(e) => handleChange(e.target.value)} />
-                </label>
-                <input type="submit" value="Submit" />
+        <div className="upload-form-container">
+            {/* Alert */}
+            {submitStatus.type && (
+                <div className={`upload-alert ${submitStatus.type} ${alertExiting ? 'exiting' : ''}`}>
+                    <div className="upload-alert-icon">
+                        {submitStatus.type === 'success' ? '✓' : '✗'}
+                    </div>
+                    <div className="upload-alert-content">
+                        <div className="upload-alert-title">
+                            {submitStatus.type === 'success' ? 'Success' : 'Error'}
+                        </div>
+                        <div className="upload-alert-message">{submitStatus.message}</div>
+                    </div>
+                        <button 
+                            className="upload-alert-close"
+                            onClick={closeAlert}
+                            aria-label="Close alert"
+                        >
+                        ×
+                    </button>
+                </div>
+            )}
+
+            <h2 className="upload-form-title">Submit Your Run</h2>
+            <form onSubmit={onSubmit} className="upload-form">
+                <div className="form-group">
+                    <input 
+                        type="text" 
+                        className="form-input"
+                        placeholder="Youtube Video URL"
+                        value={vod}
+                        onChange={(e) => handleChange(e.target.value)}
+                        disabled={submitting || !validUser}
+                    />
+                    <div className="error-message" style={{ display: 'none' }}>
+                        Please enter a valid YouTube URL
+                    </div>
+                </div>
+
+                <div className={`score-display ${validUser ? 'valid' : user?.loggedIn ? 'invalid' : 'neutral'}`}>
+                    {validUser ? (
+                        <>Your score: <span className="score-value">{score}</span></>
+                    ) : user?.loggedIn ? (
+                        "You need to be in the top 50 to submit a run"
+                    ) : (
+                        "Please log in to submit a run"
+                    )}
+                </div>
+
+                <button 
+                    type="submit" 
+                    className={`submit-button ${submitting ? 'loading' : ''}`}
+                    disabled={submitting || !validUser}
+                >
+                    {submitting ? 'Submitting...' : 'Submit Run'}
+                </button>
+
+                {submitting && (
+                    <div className="upload-status info">
+                        <div className="loading-spinner"></div>
+                        Processing your submission...
+                    </div>
+                )}
             </form>
         </div>
     );

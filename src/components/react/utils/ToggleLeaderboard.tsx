@@ -1,5 +1,5 @@
 import { useStore } from "@nanostores/react";
-import "../../styles/toggleSwitch.css";
+import "../../../styles/toggleSwitch.css";
 import { changeVerifiedChecked, verifiedChecked } from "../../../data/nanostores/stores";
 
 const ToggleLeaderboardComponent = () => {

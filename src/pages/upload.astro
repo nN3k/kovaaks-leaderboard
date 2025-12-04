@@ -1,12 +1,16 @@
 ---
 import ScenarioList from '../components/react/listComponents/ScenarioList';
-import SearchBar from '../components/react/listComponents/SearchScenarioInput';
+import SearchScenarioInput from '../components/react/listComponents/SearchScenarioInput';
 import UploadRun from '../components/react/utils/UploadRun';
 import Layout from '../layouts/BaseLayout.astro';
 ---
 
 <Layout>
-    <UploadRun client:load />
-    <SearchBar client:load />
-    <ScenarioList client:load />
+    <div class="innerGrid">
+        <UploadRun client:load />
+        <div class="searchScenarioBundle">
+                <SearchScenarioInput client:load/>
+                <ScenarioList client:load/>
+        </div>
+    </div>
 </Layout>

@@ -19,25 +19,16 @@ export function quoteSqlIdentifier(name: string): string {
     return `"${escaped}"`;
 }
 
-/**
- * Normalize a scenario name into a safe SQL identifier.
- * - Keeps letters, numbers, underscores, and allowed symbols.
- * - Replaces other characters with underscores.
- * - Truncates long names.
- * - Appends a short hash for uniqueness.
- */
 export function normalizeScenarioName(rawName: string): string {
-    // Allow letters, numbers, underscores, dash, plus, @, pipe, tilde
-    const safeName = rawName.replace(/[^a-zA-Z0-9_\-+@|~]/g, "_");
-
-    // Compute a short hash (first 8 chars of SHA1) for uniqueness
-    const hash = crypto.createHash("sha1").update(rawName).digest("hex").slice(0, 8);
-
-    // Truncate the safeName to leave room for hash if too long
-    const maxLength = 50; // adjust to leave room for "_<hash>"
-    const truncated = safeName.length > maxLength ? safeName.slice(0, maxLength) : safeName;
-
-    return `${truncated}_${hash}`;
+  const safeName = rawName.replace(/[^a-zA-Z0-9_\-+@|~]/g, "_");
+  const hash = crypto.createHash("sha1").update(rawName).digest("hex").slice(0, 8);
+  const maxLength = 50;
+  const truncated = safeName.length > maxLength ? safeName.slice(0, maxLength) : safeName;
+  
+  // If the name starts with a number, prefix it with a letter
+  const finalName = /^\d/.test(truncated) ? `table_${truncated}` : truncated;
+  
+  return `${finalName}_${hash}`;
 }
 
 
