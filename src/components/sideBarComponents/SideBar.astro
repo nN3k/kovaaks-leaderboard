@@ -2,12 +2,23 @@
 import "../../styles/sideBar.css"
 import "./Row.astro"
 import Row from "./Row.astro"
+
+import astroIcon from "../../assets/astro.svg";
+
+const navItems = [
+    { href: '/', label: 'Scenarios', icon: astroIcon },
+    { href: '/playersearch', label: 'Player Search', icon: astroIcon },
+    { href: '/playlists', label: 'Playlists', icon: astroIcon },
+    { href: '/benchmarks', label: 'Benchmarks', icon: astroIcon },
+    { href: '/profile', label: 'Profile', icon: astroIcon },
+];
 ---
 
-<div class="sideBarDiv">
-    <Row rowDisplay="Player Search"/>
-    <Row rowDisplay="Scenarios"/>
-    <Row rowDisplay="Playlists"/>
-    <Row rowDisplay="Benchmark Tracker"/>
-    <Row rowDisplay="Trending"/>
-</div>
+
+<aside class="sidebar-container">
+    <nav class="sidebar">
+        {navItems.map(item => (
+            <Row href={item.href} label={item.label} icon={item.icon} />
+        ))}
+    </nav>
+</aside>

@@ -8,10 +8,10 @@ import SideBar from '../components/sideBarComponents/SideBar.astro';
 import ScoreList from '../components/react/ScoreList';
 import ScoreListName from '../components/react/ScoreListName';
 import ToggleLeaderboard from '../components/react/ToggleLeaderboard';
-import LogoutButton from '../components/react/LogoutButton';
-import LoginWithSteam from '../components/react/LoginWithSteam';
+import LogoutButton from '../components/react/steam/LogoutButton';
+import LoginWithSteam from '../components/react/steam/LoginWithSteam';
 import ShowSteam from '../components/react/CheckLogin';
-import SteamProfile from '../components/react/SteamProfile';
+import SteamProfile from '../components/react/steam/SteamProfile';
 import InputSteamId from '../components/dev/InputSteamId';
 import DevLogin from '../components/dev/Login';
 import UploadRun from '../components/react/UploadRun';
@@ -21,11 +21,9 @@ import UploadRun from '../components/react/UploadRun';
 <Layout>
 	<div class="innerGrid">
 		<UploadRun client:load/>
-		<div></div>
+		<ShowSteam client:load/>
 		<InputSteamId client:load/>
 		<DevLogin client:load/>
-		<ShowSteam client:load/>
-		<LogoutButton client:load/>
 		<div class="searchScenarioBundle">
 			<SearchScenarioInput client:load/>
 			<ScenarioList client:load/>
@@ -38,5 +36,4 @@ import UploadRun from '../components/react/UploadRun';
 			<ScoreList client:load/>
 		</div>
 	</div>
-	<SideBar/>
 </Layout>

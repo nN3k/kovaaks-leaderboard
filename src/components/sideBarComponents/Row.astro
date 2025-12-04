@@ -1,10 +1,35 @@
 ---
-import astroLogo from '../../assets/astro.svg';
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 
-const { rowDisplay } = Astro.props; 
+interface Props {
+  href: string;
+  label: string;
+  icon?: ImageMetadata;
+}
+
+const { href, label, icon } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+
+const isActive = currentPath === href || currentPath === href + '/';
 ---
 
-<div class="row">
-    <img src={astroLogo.src}>
-    <p>{rowDisplay}</p>
-</div>
+<a 
+    href={href}
+    class:list={[
+        "sidebar-row",
+        { "active": isActive }
+    ]}
+    >
+
+    {icon && (
+        <Image 
+        src={icon} 
+        alt={`${label} icon`}
+        class="icon"
+        />
+    )}
+    
+    <span>{label}</span>
+</a>

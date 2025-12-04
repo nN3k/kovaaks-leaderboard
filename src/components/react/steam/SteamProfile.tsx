@@ -1,6 +1,15 @@
+import "../../../styles/steamProfile.css";
 import { useState, useEffect } from 'react';
 
-const SteamProfile = () => {
+interface loggedIn {
+    auth: string;
+}
+
+const SteamProfile = ({ auth }: loggedIn) => {
+    if (auth !== "true") {
+        return null;
+    }
+
     const [profile, setProfile] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -52,10 +61,9 @@ const SteamProfile = () => {
     return (
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             {profile.avatar && (
-                <img
+                <img className="steam-avatar"
                     src={profile.avatar}
                     alt={profile.personaName || ""}
-                    style={{ borderRadius: "50%", width: 50, height: 50 }}
                 />
             )}
             <div>

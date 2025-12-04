@@ -1,14 +1,33 @@
-.row {
-    display: flex;
-    padding-left: 15px;
+.sidebar-container {
+    
 }
 
-.sideBarDiv {
+.sidebar {
     background-color: #1a2336;
-    justify-content: end;
-    width: max-content;
-    right: 0;
-    height: auto;
-    max-height: max-content;
-    object-fit: cover;
+}
+
+.sidebar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    transition: #1a2336;
+    color: white;
+    font-weight: bold;
+}
+
+.sidebar-row.active {
+    background-color: #C2185B;
+}
+
+.sidebar-row:hover {
+    background-color: #d63475;
+}
+
+.icon {
+    width: auto;
+    height: 100%; /* Height of the row */
+    max-height: 1.5rem; /* Adjust based on your row height */
+    object-fit: contain;
 }

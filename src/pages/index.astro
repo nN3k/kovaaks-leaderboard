@@ -2,7 +2,6 @@
 import Layout from '../layouts/BaseLayout.astro';
 import SearchScenarioInput from '../components/react/SearchScenarioInput';
 import ScenarioList from "../components/react/ScenarioList";
-import SideBar from '../components/sideBarComponents/SideBar.astro';
 import ScoreList from '../components/react/ScoreList';
 import ScoreListName from '../components/react/ScoreListName';
 import ToggleLeaderboard from '../components/react/ToggleLeaderboard';
@@ -23,5 +22,4 @@ import ToggleLeaderboard from '../components/react/ToggleLeaderboard';
 			<ScoreList client:load/>
 		</div>
 	</div>
-	<SideBar/>
 </Layout>

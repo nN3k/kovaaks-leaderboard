@@ -1,15 +1,10 @@
 ---
-import LoginWithSteam from "../components/react/LoginWithSteam";
-import LogoutButton from "../components/react/LogoutButton";
-import SteamProfile from "../components/react/SteamProfile";
-
-
+import "../styles/header.css"
+import SteamComponentsInHeader from "../components/react/steam/SteamComponentsInHeader"
 ---
 
 <header>
-    <div style="justify-content: end; display: flex; align-items: center; margin-bottom: 1rem;">
-        <LoginWithSteam client:load/>
-        <LogoutButton client:load/>
-	    <SteamProfile client:load/>
+    <div>
+        <SteamComponentsInHeader client:load/>
     </div>
 </header>
