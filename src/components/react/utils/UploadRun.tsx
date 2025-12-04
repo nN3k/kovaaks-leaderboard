@@ -1,5 +1,5 @@
 import { useStore } from "@nanostores/react";
-import { selectedScenarioId, selectedScenarioName } from "../../data/nanostores/stores";
+import { selectedScenarioId, selectedScenarioName } from "../../../data/nanostores/stores";
 import { useEffect, useState } from "react";
 
 const UploadRunComponent = () => {
