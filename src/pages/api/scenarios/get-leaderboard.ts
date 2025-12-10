@@ -1,5 +1,5 @@
-// src/pages/api/scenarios/get-leaderboard.ts
 import type { APIRoute } from "astro";
+import { db } from "../../../utils/turso-client";
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -9,7 +9,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify([]), { status: 400 });
     }
 
-    const { db, normalizeScenarioName } = await import("./scenarioDb");
+    const { normalizeScenarioName } = await import("./scenarioDb");
     const tableName = normalizeScenarioName(scenarioName);
     
     // OPTIMAL QUERY: Single JOIN with proper column names
@@ -17,11 +17,11 @@ export const POST: APIRoute = async ({ request }) => {
         SELECT 
             l.Score as score,
             COALESCE(p.SteamName, l.SteamId) as player
-        FROM "${tableName}" l
-        LEFT JOIN profiles p ON l.SteamId = p.SteamId
-        WHERE l.Score IS NOT NULL
-        ORDER BY l.Score DESC
-        LIMIT 50;
+            FROM "${tableName}" l
+            LEFT JOIN profiles p ON l.SteamId = p.SteamId
+            WHERE l.Score IS NOT NULL
+            ORDER BY l.Score DESC
+            LIMIT 50;
     `;
     
     const result = await db.execute({ sql: query });

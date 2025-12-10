@@ -1,7 +1,28 @@
 import type { APIRoute } from 'astro';
-import { db, ensureTableExists, quoteSqlIdentifier } from './scenarioDb';
+import { ensureTableExists, quoteSqlIdentifier } from './scenarioDb';
+import { db } from "../../../utils/turso-client";
+import { verifyApiKey } from '../../../../utils/api/key/manage-keys';
 
 export const POST: APIRoute = async ({ request }) => {
+    const apiKey = request.headers.get('Authorization')?.replace('Bearer ', '');
+    
+    if (!apiKey) {
+        return new Response(JSON.stringify({ error: 'API key required' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+    
+
+    const isValid = await verifyApiKey(apiKey);
+    
+    if (!isValid) {
+        return new Response(JSON.stringify({ error: 'Invalid API key' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+    
     try {
         const { steamId, score, vod, scenarioName } = await request.json();
 

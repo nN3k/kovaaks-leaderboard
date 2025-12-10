@@ -1,11 +1,5 @@
-import { createClient } from "@libsql/client";
+import { db } from "../../../utils/turso-client";
 import crypto from "crypto";
-
-export const db = createClient({
-    url: process.env.TURSO_DATABASE_URL!,
-    authToken: process.env.TURSO_AUTH_TOKEN!,
-});
-
 
 const metaTable = quoteSqlIdentifier("ScenarioNames");
 

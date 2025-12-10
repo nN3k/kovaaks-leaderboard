@@ -3,7 +3,12 @@ import { selectedScenarioId, selectedScenarioName } from "../../../data/nanostor
 import { useEffect, useState } from "react";
 import "../../../styles/uploadRun.css";
 
+
 const UploadRunComponent = () => {
+    const API_KEY = import.meta.env.PUBLIC_API_KEY;
+    const insertProfileUrl = "/api/profiles/insert";
+    const insertScenarioUrl = "/api/scenarios/insert";
+
     const selectedScenarioID = useStore(selectedScenarioId);
     const scenarioName = useStore(selectedScenarioName);
 
@@ -95,9 +100,12 @@ const UploadRunComponent = () => {
             }
 
             // Insert/update profile
-            const profileResponse = await fetch("/api/profiles/insert", {
+            const profileResponse = await fetch(insertProfileUrl, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${API_KEY}`
+                },
                 body: JSON.stringify({
                     steamId: user.steamId,
                     steamName: profileData.personaname,
@@ -111,9 +119,12 @@ const UploadRunComponent = () => {
             }
 
             // Insert/update run
-            const scenarioResponse = await fetch("/api/scenarios/insert", {
+            const scenarioResponse = await fetch(insertScenarioUrl, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${API_KEY}`
+                },
                 body: JSON.stringify({
                     steamId: user.steamId,
                     score,

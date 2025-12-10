@@ -1,46 +1,39 @@
-// src/pages/api/profiles/insert.json.ts
 import type { APIRoute } from "astro";
-import { createClient } from "@libsql/client";
+import { db } from "../../../utils/turso-client";
+import { verifyApiKey } from "../../../../utils/api/key/manage-keys";
 
-
-// Turso client
-const db = createClient({
-    url: process.env.TURSO_DATABASE_URL!,
-    authToken: process.env.TURSO_AUTH_TOKEN!,
-});
 
 export async function profileExists(steamId: string) {
-  const result = await db.execute({
-    sql: "SELECT 1 FROM profiles WHERE SteamId = ? LIMIT 1",
-    args: [steamId],
-  });
-
-  return result.rows.length > 0;
+    const result = await db.execute({
+        sql: "SELECT 1 FROM profiles WHERE SteamId = ? LIMIT 1",
+        args: [steamId],
+    });
+    
+    return result.rows.length > 0;
 }
 
 async function updateProfile(steamId: string, data: Record<string, any>) {
-    // 1. Fetch current profile
     const current = await db.execute({
         sql: "SELECT * FROM profiles WHERE SteamId = ? LIMIT 1",
         args: [steamId],
     });
-
+    
     if (current.rows.length === 0) return; // no profile found
-
+    
     const profile = current.rows[0];
-
-    // 2. Determine which fields changed
+    
+    // Determine which fields changed
     const changedEntries = Object.entries(data).filter(
         ([key, value]) => profile[key] !== value
     );
+    
+    if (changedEntries.length === 0) return;
+    
 
-    if (changedEntries.length === 0) return; // nothing to update
-
-    // 3. Build update query only for changed fields
     const setClause = changedEntries.map(([k]) => `${k} = ?`).join(", ");
     const values = changedEntries.map(([, v]) => v);
+    
 
-    // 4. Perform update
     await db.execute({
         sql: `UPDATE profiles SET ${setClause} WHERE SteamId = ?`,
         args: [...values, steamId],
@@ -48,6 +41,25 @@ async function updateProfile(steamId: string, data: Record<string, any>) {
 }
 
 export const POST: APIRoute = async ({ request }) => {
+    const apiKey = request.headers.get('Authorization')?.replace('Bearer ', '');
+    
+    if (!apiKey) {
+        return new Response(JSON.stringify({ error: 'API key required' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+    
+
+    const isValid = await verifyApiKey(apiKey);
+    
+    if (!isValid) {
+        return new Response(JSON.stringify({ error: 'Invalid API key' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+    
     try {
         const data = await request.json();
 
