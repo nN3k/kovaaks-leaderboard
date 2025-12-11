@@ -5,21 +5,33 @@ import "../../../styles/uploadRun.css";
 
 
 const UploadRunComponent = () => {
-    const API_KEY = import.meta.env.PUBLIC_API_KEY;
+
+    /**************************/
+    /* Exposes key to browser */
+    /*   NEEDS TO BE CHANGED  */
+    /**************************/
+    const API_KEY = import.meta.env.RAW_AIM_API_KEY; // not safe! Do research. Maybe Proxy
+
+
     const insertProfileUrl = "/api/profiles/insert";
     const insertScenarioUrl = "/api/scenarios/insert";
 
     const selectedScenarioID = useStore(selectedScenarioId);
     const scenarioName = useStore(selectedScenarioName);
 
-    // User and Steam profile state
+    
     const [user, setUser] = useState<{ loggedIn: boolean; steamId?: string } | null>(null);
     const [profile, setProfile] = useState<any>(null);
 
-    // Form and validation state
+    
     const [validUser, setValidUser] = useState(false);
     const [vod, setVodLink] = useState("");
     const [score, setScore] = useState<number>(0);
+    const [accuracy, setAccuracy] = useState<number>(0);
+    const [fov, setFov] = useState<number>(0);
+    const [fovScaling, setFovScaling] = useState("");
+    const [avgFps, setAvgFps] = useState<number>(0);
+    const [sens360, setSens360] = useState<number>(0);
     const [submitting, setSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<{
         type: 'success' | 'error' | null;
@@ -66,7 +78,7 @@ const UploadRunComponent = () => {
         }, 300);
     };
 
-    // Submit both profile and run in a single flow
+    
     const submitRun = async () => {
         if (!user?.loggedIn) {
             showAlert('error', "Please log in to submit a run");
@@ -127,8 +139,13 @@ const UploadRunComponent = () => {
                 },
                 body: JSON.stringify({
                     steamId: user.steamId,
-                    score,
+                    score: score,
                     vod: videoId,
+                    accuracy: accuracy,
+                    fov: fov,
+                    fovScaling: fovScaling,
+                    sens360: sens360,
+                    avgFps: avgFps,
                     scenarioName: scenarioName,
                 }),
             });
@@ -181,9 +198,19 @@ const UploadRunComponent = () => {
             if (userEntry) {
                 setValidUser(true);
                 setScore(userEntry.score);
+                setAccuracy(userEntry.attributes.accuracyDamage);
+                setFov(userEntry.attributes.fov);
+                setFovScaling(userEntry.attributes.fovScaling);
+                setAvgFps(userEntry.attributes.avgFps);
+                setSens360(userEntry.attributes.cm360);
             } else {
                 setValidUser(false);
                 setScore(0);
+                setAccuracy(0);
+                setFov(0);
+                setFovScaling("");
+                setAvgFps(0);
+                setSens360(0);
             }
         };
 

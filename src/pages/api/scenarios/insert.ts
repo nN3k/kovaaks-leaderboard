@@ -24,7 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
     
     try {
-        const { steamId, score, vod, scenarioName } = await request.json();
+        const { steamId, score, vod, accuracy, sens360, fov, fovScaling, avgFPS, scenarioName } = await request.json();
 
         if (!steamId || score == null || !vod || !scenarioName) {
             return new Response(JSON.stringify({ error: 'Missing data' }), { status: 400 });
@@ -39,15 +39,25 @@ export const POST: APIRoute = async ({ request }) => {
         // Insert or update score if the new score is higher
         await db.execute({
             sql: `
-                INSERT INTO ${table} (SteamId, Score, VOD)
-                VALUES (?, ?, ?)
+                INSERT INTO ${table} (SteamId, Score, Vod, Accuracy, Sens360, Fov, FovScaling, AvgFps)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(SteamId) DO UPDATE SET
                     Score = CASE
                         WHEN excluded.Score > Score THEN excluded.Score ELSE Score END,
-                    VOD = CASE
-                        WHEN excluded.Score > Score THEN excluded.VOD ELSE VOD END
+                    Vod = CASE
+                        WHEN excluded.Score > Score THEN excluded.Vod ELSE Vod END
+                    Accuracy = CASE
+                        WHEN excluded.Score > Score THEN excluded.Accuracy ELSE Accuracy END
+                    Sens360 = CASE
+                        WHEN excluded.Score > Score THEN excluded.Sens360 ELSE Sens360 END
+                    Fov = CASE
+                        WHEN excluded.Score > Score THEN excluded.Fov ELSE Fov END
+                    FovScaling = CASE
+                        WHEN excluded.Score > Score THEN excluded.FovScaling ELSE FovScaling END
+                    AvgFps = CASE
+                        WHEN excluded.Score > Score THEN excluded.AvgFps ELSE AvgFps END
             `,
-            args: [steamId, score, vod],
+            args: [steamId, score, vod, accuracy, sens360, fov, fovScaling, avgFPS],
         });
 
         // Count rows to enforce top 50 scores

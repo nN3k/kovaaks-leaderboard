@@ -64,7 +64,12 @@ export async function ensureTableExists(scenarioName: string) {
             id INTEGER PRIMARY KEY,
             SteamId TEXT NOT NULL,
             Score REAL NOT NULL DEFAULT 0,
-            VOD TEXT DEFAULT "",
+            Vod TEXT NOT NULL,
+            Accuracy INTEGER NOT NULL,
+            Sens360 INTEGER NOT NULL,
+            Fov INTEGER NOT NULL,
+            FovScaling TEXT NOT NULL,
+            AvgFps TEXT NOT NULL,
             CreatedAt TEXT DEFAULT CURRENT_TIMESTAMP
         )
     `);
