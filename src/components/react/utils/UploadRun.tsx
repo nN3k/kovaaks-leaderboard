@@ -1,5 +1,5 @@
 import { useStore } from "@nanostores/react";
-import { selectedScenarioId, selectedScenarioName } from "../../../data/nanostores/stores";
+import { selectedScenarioId, selectedScenarioName, selectedScenarioEntries } from "../../../data/nanostores/stores";
 import { useEffect, useState } from "react";
 import "../../../styles/uploadRun.css";
 import config from "../../../data/config.json";
@@ -19,6 +19,7 @@ const UploadRunComponent = () => {
 
     const selectedScenarioID = useStore(selectedScenarioId);
     const scenarioName = useStore(selectedScenarioName);
+    const scenarioEntries = useStore(selectedScenarioEntries);
 
     
     const [user, setUser] = useState<{ loggedIn: boolean; steamId?: string } | null>(null);
@@ -26,6 +27,7 @@ const UploadRunComponent = () => {
 
     
     const [validUser, setValidUser] = useState(false);
+    const [validRun, setValidRun] = useState(false);
     const [vod, setVodLink] = useState("");
     const [score, setScore] = useState<number>(0);
     const [accuracy, setAccuracy] = useState<number>(0);
@@ -197,6 +199,13 @@ const UploadRunComponent = () => {
 
     useEffect(() => {
         const verifyRun = async () => {
+            if (scenarioEntries < config.required_entries) {
+                setValidRun(false);
+                return;
+            } else {
+                setValidRun(true);
+            }
+
             const response = await fetch(
                 `https://kovaaks.com/webapp-backend/leaderboard/scores/global?leaderboardId=${selectedScenarioID}&page=0&max=${config.rank_cutoff}`
             );
@@ -265,15 +274,20 @@ const UploadRunComponent = () => {
                     </div>
                 </div>
 
-                <div className={`score-display ${validUser ? 'valid' : user?.loggedIn ? 'invalid' : 'neutral'}`}>
-                    {validUser ? (
-                        <>Your score: <span className="score-value">{score}</span></>
+                <div className={`score-display ${validRun === false ? 'invalid' : validUser ? 'valid' : user?.loggedIn ? 'invalid' : 'neutral'}`}>
+                    {validRun === false ? (
+                        `Scenario must have at least ${config.required_entries} entries`
+                    ) : validUser ? (
+                        <>
+                        Your score: <span className="score-value">{score}</span>
+                        </>
                     ) : user?.loggedIn ? (
                         "You need to be in the top 50 to submit a run"
                     ) : (
                         "Please log in to submit a run"
                     )}
                 </div>
+
 
                 <button 
                     type="submit" 

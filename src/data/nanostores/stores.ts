@@ -30,6 +30,8 @@ export function changeSelectedScenarioId(scenarioId: number) {
 export function changeSelectedScenarioName(scenarioName: string) {
   selectedScenarioName.set(scenarioName);
 }
+
+export const selectedScenarioEntries = atom<number>(0);
 //-----End of selectedScenario-------------
 
 

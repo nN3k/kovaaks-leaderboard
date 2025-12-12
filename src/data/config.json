@@ -1,4 +1,5 @@
 {
     "project_Name": "Raw Aim",
-    "rank_cutoff": 50
+    "rank_cutoff": 50,
+    "required_entries": 1500
 }
