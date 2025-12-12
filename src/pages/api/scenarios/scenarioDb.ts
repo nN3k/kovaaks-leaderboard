@@ -66,10 +66,10 @@ export async function ensureTableExists(scenarioName: string) {
             Score REAL NOT NULL DEFAULT 0,
             Vod TEXT NOT NULL,
             Accuracy INTEGER NOT NULL,
-            Sens360 INTEGER NOT NULL,
-            Fov INTEGER NOT NULL,
-            FovScaling TEXT NOT NULL,
-            AvgFps TEXT NOT NULL,
+            Sens360 INTEGER,
+            Fov INTEGER,
+            FovScaling TEXT,
+            AvgFps TEXT,
             CreatedAt TEXT DEFAULT CURRENT_TIMESTAMP
         )
     `);

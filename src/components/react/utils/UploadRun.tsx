@@ -2,6 +2,7 @@ import { useStore } from "@nanostores/react";
 import { selectedScenarioId, selectedScenarioName } from "../../../data/nanostores/stores";
 import { useEffect, useState } from "react";
 import "../../../styles/uploadRun.css";
+import config from "../../../data/config.json";
 
 
 const UploadRunComponent = () => {
@@ -10,7 +11,7 @@ const UploadRunComponent = () => {
     /* Exposes key to browser */
     /*   NEEDS TO BE CHANGED  */
     /**************************/
-    const API_KEY = import.meta.env.RAW_AIM_API_KEY; // not safe! Do research. Maybe Proxy
+    const API_KEY = import.meta.env.PUBLIC_RAW_AIM_API_KEY; // not safe! Do research. Maybe Proxy
 
 
     const insertProfileUrl = "/api/profiles/insert";
@@ -123,6 +124,7 @@ const UploadRunComponent = () => {
                     steamName: profileData.personaname,
                     country: profileData.loccountrycode,
                     isBanned: false,
+                    scenarioId: selectedScenarioID,
                 }),
             });
 
@@ -147,6 +149,7 @@ const UploadRunComponent = () => {
                     sens360: sens360,
                     avgFps: avgFps,
                     scenarioName: scenarioName,
+                    scenarioId: selectedScenarioID,
                 }),
             });
 
@@ -190,7 +193,7 @@ const UploadRunComponent = () => {
             }
 
             const response = await fetch(
-                `https://kovaaks.com/webapp-backend/leaderboard/scores/global?leaderboardId=${selectedScenarioID}&page=0&max=50`
+                `https://kovaaks.com/webapp-backend/leaderboard/scores/global?leaderboardId=${selectedScenarioID}&page=0&max=${config.rank_cutoff}`
             );
             const data = await response.json();
 

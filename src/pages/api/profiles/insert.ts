@@ -1,7 +1,9 @@
 import type { APIRoute } from "astro";
 import { db } from "../../../utils/turso-client";
 import { verifyApiKey } from "../../../../utils/api/key/manage-keys";
+import config from "../../../data/config.json";
 
+const baseUrl = import.meta.env.PROD ? import.meta.env.PUBLIC_NETLIFY_URL : import.meta.env.PUBLIC_LOCAL_URL;
 
 export async function profileExists(steamId: string) {
     const result = await db.execute({
@@ -42,6 +44,15 @@ async function updateProfile(steamId: string, data: Record<string, any>) {
 
 export const POST: APIRoute = async ({ request }) => {
     const apiKey = request.headers.get('Authorization')?.replace('Bearer ', '');
+    const origin = new URL(request.url).origin;
+
+    if (origin !== baseUrl) {
+        console.error(`Invalid origin: ${origin}`);
+        return new Response(JSON.stringify({ error: 'Invalid origin' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
     
     if (!apiKey) {
         return new Response(JSON.stringify({ error: 'API key required' }), {
@@ -50,7 +61,6 @@ export const POST: APIRoute = async ({ request }) => {
         });
     }
     
-
     const isValid = await verifyApiKey(apiKey);
     
     if (!isValid) {
@@ -60,19 +70,33 @@ export const POST: APIRoute = async ({ request }) => {
         });
     }
     
+
+
     try {
         const data = await request.json();
 
-
-        if (!data.steamId || !data.steamName) {
+        if (!data.steamId || !data.steamName || !data.scenarioId) {
+            console.error(`Missing data in request: SteamID: ${data.steamId} ScenarioID: ${data.scenarioId} SteamName: ${data.steamName}`);
             return new Response(
-                JSON.stringify({ error: "steamId and steamName are required" }),
+                JSON.stringify({ error: "Missing data" }),
                 {
                     status: 400,
                     headers: { "Content-Type": "application/json" },
                 }
             );
         }
+        
+        const response = await fetch(
+            `https://kovaaks.com/webapp-backend/leaderboard/scores/global?leaderboardId=${data.scenarioId}&page=0&max=${config.rank_cutoff}`
+        );
+        const scenarioData = await response.json();
+
+        const userEntry = scenarioData.data.find((entry: any) => entry.steamId === data.steamId);
+        if (!userEntry) {
+            console.error("User entry not found in scenario data");
+            return new Response(JSON.stringify({ error: "User entry not found in scenario data" }), { status: 404 });
+        }
+
 
         if (await profileExists(data.steamId)) {
             await updateProfile(data.steamId, {
@@ -80,7 +104,6 @@ export const POST: APIRoute = async ({ request }) => {
                 Country: data.country,
                 isBanned: data.isBanned,
             });
-
 
             return new Response(
                 JSON.stringify({ error: "Profile with this steamId already exists and has been updated" }),
