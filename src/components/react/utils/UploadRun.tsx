@@ -178,7 +178,7 @@ const UploadRunComponent = () => {
 
 
     useEffect(() => {
-        const verifyUser = async () => {
+        const checkLogin = async () => {
             let loginData;
             try {
                 loginData = await fetch("/.netlify/functions/check-login").then(res => res.json());
@@ -191,13 +191,18 @@ const UploadRunComponent = () => {
                 setValidUser(false);
                 return;
             }
+        };
+        checkLogin();
+    }, []);
 
+    useEffect(() => {
+        const verifyRun = async () => {
             const response = await fetch(
                 `https://kovaaks.com/webapp-backend/leaderboard/scores/global?leaderboardId=${selectedScenarioID}&page=0&max=${config.rank_cutoff}`
             );
             const data = await response.json();
 
-            const userEntry = data.data.find((entry: any) => entry.steamId === loginData.steamId);
+            const userEntry = data.data.find((entry: any) => entry.steamId === user?.steamId);
             if (userEntry) {
                 setValidUser(true);
                 setScore(userEntry.score);
@@ -217,7 +222,7 @@ const UploadRunComponent = () => {
             }
         };
 
-        verifyUser();
+        verifyRun();
     }, [selectedScenarioID]);
 
     return (
