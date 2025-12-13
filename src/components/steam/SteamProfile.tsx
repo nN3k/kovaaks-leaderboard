@@ -1,4 +1,4 @@
-import "../../../styles/steamProfile.css";
+import "../../styles/steamProfile.css";
 import { useState, useEffect } from 'react';
 
 interface loggedIn {

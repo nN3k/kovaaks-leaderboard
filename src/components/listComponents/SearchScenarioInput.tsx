@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { changeScenarioSearchValue } from "../../../data/nanostores/stores";
-import "../../../styles/searchBar.css";
+import { changeScenarioSearchValue } from "../../data/nanostores/stores";
+import "../../styles/searchBar.css";
 
 const SearchBarComponent = () => {
     const [input, setInput] = useState("");

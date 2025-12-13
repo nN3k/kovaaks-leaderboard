@@ -1,8 +1,8 @@
 import { useStore } from "@nanostores/react";
-import { selectedScenarioId, selectedScenarioName, selectedScenarioEntries } from "../../../data/nanostores/stores";
+import { selectedScenarioId, selectedScenarioName, selectedScenarioEntries } from "../../data/nanostores/stores";
 import { useEffect, useState } from "react";
-import "../../../styles/uploadRun.css";
-import config from "../../../data/config.json";
+import "../../styles/uploadRun.css";
+import config from "../../data/config.json";
 
 
 const UploadRunComponent = () => {

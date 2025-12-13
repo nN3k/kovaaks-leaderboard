@@ -1,6 +1,6 @@
 import { useStore } from "@nanostores/react";
-import { selectedScenarioName } from "../../../data/nanostores/stores";
-import "../../../styles/scoreListName.css";
+import { selectedScenarioName } from "../../data/nanostores/stores";
+import "../../styles/scoreListName.css";
 
 const ScoreListNameComponent = () => {
 

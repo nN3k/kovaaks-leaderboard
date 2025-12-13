@@ -1,5 +1,6 @@
 {
-    "project_Name": "Raw Aim",
+    "project_name": "RAW AIM",
     "rank_cutoff": 50,
-    "required_entries": 1500
+    "required_entries": 1500,
+    "play_scenarios_url": "steam://run/824270/?action=jump-to-scenario;name="
 }

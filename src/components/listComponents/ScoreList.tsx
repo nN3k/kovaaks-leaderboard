@@ -1,5 +1,5 @@
 import { useStore } from "@nanostores/react";
-import { selectedScenarioId, selectedScenarioName, verifiedChecked } from "../../../data/nanostores/stores";
+import { selectedScenarioId, selectedScenarioName, verifiedChecked } from "../../data/nanostores/stores";
 import { useEffect, useState } from "react";
 
 const ScoreList = () => {
@@ -22,7 +22,6 @@ const ScoreList = () => {
         async function fetchLeaderboard() {
             try {
                 if (verifiedList) {
-                    // Fetch from your API
                     const response = await fetch('/api/scenarios/get-leaderboard', {
                         method: 'POST',
                         headers: {
@@ -38,14 +37,15 @@ const ScoreList = () => {
                     
                     const data = await response.json();
                     
-                    // Make sure data is an array
                     if (Array.isArray(data)) {
                         setTop50(data);
                     } else {
                         throw new Error('Invalid response format: expected array');
                     }
+
+                
+                // Offical Kovaaks List
                 } else {
-                    // Fetch from external API
                     const link = `https://kovaaks.com/webapp-backend/leaderboard/scores/global?leaderboardId=${selectedScenarioID}&page=0&max=50`;
                     const response = await fetch(link, { signal });
                     
@@ -63,9 +63,7 @@ const ScoreList = () => {
                     setTop50(newTop50);
                 }
             } catch (err: unknown) {
-                // Type-safe error checking
                 if (err instanceof Error && err.name === 'AbortError') {
-                    // Aborted fetch, ignore
                     return;
                 }
                 
@@ -76,7 +74,7 @@ const ScoreList = () => {
                     console.error("Unknown error fetching leaderboard:", err);
                     setError('Unknown error occurred');
                 }
-                setTop50([]); // Clear data on error
+                setTop50([]);
             } finally {
                 setLoading(false);
             }
@@ -104,7 +102,7 @@ const ScoreList = () => {
     }
 
     return (
-        <div className="scoreList">
+        <div className="listContainer">
             <table>
                 <thead>
                     <tr>

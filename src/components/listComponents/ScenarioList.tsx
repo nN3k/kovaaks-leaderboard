@@ -1,6 +1,6 @@
-import { changeSelectedScenarioId, changeSelectedScenarioName, scenarioSearchValue, selectedScenarioEntries } from "../../../data/nanostores/stores";
+import { changeSelectedScenarioId, changeSelectedScenarioName, scenarioSearchValue, selectedScenarioEntries } from "../../data/nanostores/stores";
 import { useStore } from "@nanostores/react";
-import "../../../styles/lists.css"
+import "../../styles/lists.css"
 
 
 const scenarioListComponent = () => {
@@ -15,7 +15,7 @@ const scenarioListComponent = () => {
 
 
     return(
-        <div className="scenarioList">
+        <div className="listContainer">
             <table>
                 <thead>
                     <tr>
