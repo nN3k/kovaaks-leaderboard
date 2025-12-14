@@ -71,20 +71,10 @@ const UploadRunComponent = () => {
             }, 300);
         }, 5000);
     };
-
-
-    const closeAlert = () => {
-        setAlertExiting(true);
-        setTimeout(() => {
-            setSubmitStatus({ type: null, message: '' });
-            setAlertExiting(false);
-        }, 300);
-    };
-
     
     const submitRun = async () => {
+        showAlert('error', "Please log in to submit a run");
         if (!user?.loggedIn) {
-            showAlert('error', "Please log in to submit a run");
             return;
         }
         
@@ -114,7 +104,6 @@ const UploadRunComponent = () => {
                 return;
             }
 
-            // Insert/update profile
             const profileResponse = await fetch(insertProfileUrl, {
                 method: "POST",
                 headers: {
@@ -134,7 +123,6 @@ const UploadRunComponent = () => {
                 throw new Error('Failed to update profile');
             }
 
-            // Insert/update run
             const scenarioResponse = await fetch(insertScenarioUrl, {
                 method: "POST",
                 headers: { 
@@ -239,22 +227,12 @@ const UploadRunComponent = () => {
             {/* Alert */}
             {submitStatus.type && (
                 <div className={`upload-alert ${submitStatus.type} ${alertExiting ? 'exiting' : ''}`}>
-                    <div className="upload-alert-icon">
-                        {submitStatus.type === 'success' ? '✓' : '✗'}
-                    </div>
                     <div className="upload-alert-content">
                         <div className="upload-alert-title">
                             {submitStatus.type === 'success' ? 'Success' : 'Error'}
                         </div>
                         <div className="upload-alert-message">{submitStatus.message}</div>
                     </div>
-                        <button 
-                            className="upload-alert-close"
-                            onClick={closeAlert}
-                            aria-label="Close alert"
-                        >
-                        ×
-                    </button>
                 </div>
             )}
 

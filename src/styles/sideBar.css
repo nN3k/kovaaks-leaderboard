@@ -13,7 +13,7 @@
     text-decoration: none;
     transition: #1a2336;
     color: white;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .sidebar-row.active {
