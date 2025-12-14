@@ -79,10 +79,11 @@
 
 /* Form Container */
 .upload-form-container {
-    border-radius: 12px;
     padding: 24px;
     min-width: 15rem;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-right: 5rem;
     text-align: center;
 }
 

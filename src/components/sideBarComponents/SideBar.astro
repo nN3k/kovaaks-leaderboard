@@ -4,6 +4,7 @@ import "./Row.astro"
 import Row from "./Row.astro"
 
 import astroIcon from "../../assets/astro.svg";
+import SteamComponentsInHeader from "../steam/SteamComponentsInHeader";
 
 const navItems = [
     { href: '/', label: 'Scenarios', icon: astroIcon },
@@ -15,6 +16,7 @@ const navItems = [
 
 
 <aside class="sidebar-container">
+    <SteamComponentsInHeader client:load/>
     <nav class="sidebar">
         {navItems.map(item => (
             <Row href={item.href} label={item.label} icon={item.icon} />
